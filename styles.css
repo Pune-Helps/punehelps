@@ -1,0 +1,97 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+/* Global Styles */
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #FFFFF0; /* Ivory Background */
+    color: #36454F; /* Charcoal Gray for text */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+    color: #356E6B; /* Deep Teal for headings */
+    margin: 20px 0;
+}
+
+/* Links */
+a {
+    color: #356E6B; /* Deep Teal for links */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #9DBFAF; /* Sage Green on hover */
+    text-decoration: underline;
+}
+
+/* Buttons */
+button, .button {
+    background-color: #EABDA8; /* Soft Peach for buttons */
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: 'Merriweather', serif;
+    cursor: pointer;
+}
+
+button:hover, .button:hover {
+    background-color: #356E6B; /* Deep Teal on hover */
+}
+
+/* Primary Elements (Highlighted areas) */
+.primary {
+    background-color: #9DBFAF; /* Sage Green */
+    color: #FFFFF0; /* Ivory for contrast */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Footer and Header */
+header, footer {
+    background-color: #36454F; /* Charcoal Gray */
+    color: #FFFFF0; /* Ivory text */
+    padding: 20px;
+    text-align: center;
+}
+
+/* Forms */
+input, textarea, select {
+    border: 1px solid #9DBFAF; /* Sage Green borders */
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #356E6B; /* Deep Teal on focus */
+    outline: none;
+}
+
+/* Call-to-Action (CTA) */
+.cta {
+    background-color: #EABDA8; /* Soft Peach */
+    color: #36454F; /* Charcoal Gray text */
+    font-family: 'Merriweather', serif;
+    padding: 15px;
+    text-align: center;
+    border-radius: 6px;
+    margin: 20px 0;
+}
+
+.cta:hover {
+    background-color: #9DBFAF; /* Sage Green */
+}
+
+/* Miscellaneous */
+.highlight {
+    color: #9DBFAF; /* Sage Green for highlights */
+    font-weight: bold;
+}
