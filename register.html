@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Registration Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Additional custom styles */
-        .login-container {
+        /* Custom Styles */
+        .register-container {
             min-height: 100vh;
             display: flex;
             align-items: center;
         }
 
         .image-side {
-            background: url('your-photo.jpg') no-repeat center center;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/a/a0/Shaniwar_Wada_during_sunset.jpg') no-repeat center center;
             background-size: cover;
         }
 
-        .login-form {
+        .register-form {
             background-color: white;
             padding: 40px;
             border-radius: 16px;
@@ -28,7 +28,7 @@
             border: 2px solid #9DBFAF; /* Sage Green border */
         }
 
-        .login-form h2 {
+        .register-form h2 {
             margin-bottom: 20px;
             font-family: 'Merriweather', serif;
             color: #36454F; /* Charcoal Gray */
@@ -62,7 +62,12 @@
             background-color: #356E6B; /* Deep Teal on hover */
         }
 
-        /* Style for OAuth buttons */
+        .oauth-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
         .oauth-buttons a {
             width: 48%;
             display: flex;
@@ -86,38 +91,47 @@
             height: 20px;
             margin-right: 8px;
         }
-
     </style>
 </head>
 <body>
 
-<div class="container-fluid login-container">
+<div class="container-fluid register-container">
     <div class="row g-0 w-100">
         <!-- Image Side -->
         <div class="col-md-6 image-side d-none d-md-block"></div>
 
         <!-- Form Side -->
         <div class="col-md-6 d-flex justify-content-center align-items-center">
-            <div class="login-form text-center">
-                <h2>Sign In</h2>
-                <form action="/login" method="post">
+            <div class="register-form text-center">
+                <h2>Register</h2>
+                <form action="/register" method="post" onsubmit="return hashPassword()">
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="username" placeholder="Username or Email" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
                     </div>
-                    <button type="submit" class="btn btn-custom w-100 mb-3">Sign In</button>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pincode" required>
+                    </div>
+                    <button type="submit" class="btn btn-custom w-100 mb-3">Register</button>
                 </form>
 
-                <button class="btn btn-custom btn-register w-100 mb-3" onclick="window.location.href='/register';">Register / Sign Up</button>
-
-                <div class="d-flex justify-content-between oauth-buttons">
+                <div class="oauth-buttons">
                     <a href="/auth/facebook" class="btn btn-custom">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo"> Login with Facebook
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo"> Register with Facebook
                     </a>
                     <a href="/auth/google" class="btn btn-custom">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo"> Login with Google
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo"> Register with Google
                     </a>
                 </div>
             </div>
@@ -127,5 +141,27 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Password Hashing Script -->
+<script>
+    async function hashPassword() {
+        const passwordField = document.getElementById('password');
+        const password = passwordField.value;
+
+        // Hash the password using SHA-256
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashedPassword = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+        // Set the hashed password in the form field
+        passwordField.value = hashedPassword;
+
+        // Allow form submission
+        return true;
+    }
+</script>
+
 </body>
 </html>
