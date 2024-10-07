@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Form with Camera Access</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Custom CSS -->
+  <style>
+    video, canvas, .img-thumbnail {
+      display: block;
+      max-width: 100%;
+      margin-top: 10px;
+    }
+
+    .camera-section {
+      display: none;
+      border: 1px solid #ddd;
+      padding: 15px;
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .form-content {
+      width: 40%;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .camera-container {
+      display: none;
+      width: 40%;
+      margin-left: 20px;
+    }
+
+    .centered {
+      margin: auto;
+    }
+
+    .shift-left {
+      justify-content: flex-start;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container mt-5">
+    <div class="form-container centered" id="formCameraWrapper">
+      <!-- Form Content -->
+      <div class="card shadow p-4 form-content" id="formSection">
+        <h1 class="text-center form-title">REQUEST FORM</h1>
+        <form action="your_form_handler.php" method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="userId" class="form-label">User ID:</label>
+            <input type="text" id="userId" name="userId" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" id="title" name="title" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+          </div>
+
+          <!-- Categories and Image Upload in the same row -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="categories" class="form-label">Categories:</label>
+              <select id="categories" name="categories" class="form-select" required>
+                <option value="">--Select--</option>
+                <option value="example1">Example 1</option>
+                <option value="example2">Example 2</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="images" class="form-label">Images (Preview):</label>
+              <input type="file" id="images" name="images[]" class="form-control" multiple>
+              <div id="image-preview" class="mt-2"></div>
+            </div>
+          </div>
+
+          <!-- Open Camera Button below Image Preview -->
+          <button type="button" id="openCameraBtn" class="btn btn-primary w-100">Open Camera</button>
+
+          <!-- Extra Field (Initially hidden) -->
+          <div id="extra-field" class="mb-3" style="display:none;">
+            <label for="extraInfo" class="form-label">Extra Information:</label>
+            <input type="text" id="extraInfo" name="extraInfo" class="form-control">
+          </div>
+
+          <!-- Location and Pincode in the same row -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="location" class="form-label">Location:</label>
+              <input type="text" id="location" name="location" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="pincode" class="form-label">Pincode:</label>
+              <input type="number" id="pincode" name="pincode" class="form-control" required>
+            </div>
+          </div>
+
+          <!-- Last Date and Submit Button -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="lastDate" class="form-label">Last Date:</label>
+              <input type="date" id="lastDate" name="lastDate" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 d-flex align-items-end">
+              <input type="submit" value="Submit" class="btn btn-success w-100">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Camera Section (Initially Hidden) -->
+      <div class="camera-container" id="cameraContainer">
+        <div class="camera-section">
+          <video id="video" autoplay></video>
+          <button type="button" id="captureBtn" class="btn btn-secondary mt-2 w-100">Capture Photo</button>
+          <canvas id="canvas" style="display:none;"></canvas>
+          <div id="camera-image-preview" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Camera Access and Image Preview Script -->
+  <script>
+    $(document).ready(function() {
+      // Show/hide extra field based on category selection
+      $('#categories').change(function() {
+        if ($(this).val() === 'handjob') {
+          $('#extra-field').fadeIn();
+        } else {
+          $('#extra-field').fadeOut();
+        }
+      });
+
+      // Image preview for uploaded files
+      $('#images').on('change', function() {
+        $('#image-preview').html(''); // Clear previous previews
+        const files = this.files;
+        if (files.length > 0) {
+          for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              $('#image-preview').append('<img src="' + e.target.result + '" class="img-thumbnail" width="100">');
+            }
+            reader.readAsDataURL(files[i]);
+          }
+        }
+      });
+
+      // Open camera section when button is clicked
+      $('#openCameraBtn').on('click', function() {
+        $('.camera-section').show(); // Show camera section
+        $('#cameraContainer').show();
+        $('#formCameraWrapper').addClass('shift-left').removeClass('centered'); // Shift form to the left
+
+        // Access camera and stream video
+        const video = document.getElementById('video');
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(function(stream) {
+            video.srcObject = stream;
+          })
+          .catch(function(error) {
+            console.error("Error accessing camera:", error);
+          });
+      });
+
+      // Capture image from the camera
+      const canvas = document.getElementById('canvas');
+      const captureBtn = document.getElementById('captureBtn');
+      const cameraImagePreview = document.getElementById('camera-image-preview');
+      const context = canvas.getContext('2d');
+
+      captureBtn.addEventListener('click', function() {
+        const video = document.getElementById('video');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+        // Convert canvas to image and show preview
+        const imageDataUrl = canvas.toDataURL('image/png');
+        cameraImagePreview.innerHTML = '<img src="' + imageDataUrl + '" class="img-thumbnail" width="100">';
+      });
+    });
+  </script>
+
+</body>
+</html>
