@@ -21,10 +21,10 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-link" href="#about">Log In</a>
+                <a class="nav-link" href="login.html">Log In</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="card.html">Request Help</a>
+                <a class="nav-link" href="requestform.html">Request Help</a>
               </li>
             </ul>
           </div>
@@ -49,9 +49,17 @@
           <label class="input-group-text" for="search-filter"><img src="search logo.jpg" alt="Search" width="20"></label>
           <select class="form-select" id="search-filter">
             <option value="all">Select</option>
-            <option value="fullstack">Senior Full Stack Engineer</option>
-            <option value="manager">Manager</option>
-            <option value="developer">Developer</option>
+            <option value="Cooking Meals">Cooking Meals</option>
+            <option value="Pet Sitting or Walking">Pet Sitting or Walking</option>          
+            <option value="Childcare and Elder Care">Childcare and Elder Care</option>
+            <option value="Tutoring or Homework Help">Tutoring or Homework Help</option>
+            <option value="Donating Food or Essentials">Donating Food or Essentials</option>
+            <option value="Environmental Initiatives">Environmental Initiatives</option>
+            <option value="Recycling Help">Recycling Help</option>
+            <option value="Skill Sharing and Education">Skill Sharing and Education</option>
+            <option value="Exercise or Walking Buddy">Exercise or Walking Buddy</option>
+            <option value="Accompanying to Doctor's">Accompanying to Doctor's</option>
+            <option value="Emergency">Emergency</option>
           </select>
         </div>
       </div>
@@ -60,8 +68,13 @@
           <label class="input-group-text" for="location-filter"><img src="location logo.jpg" alt="Location" width="20"></label>
           <select class="form-select" id="location-filter">
             <option value="all">All</option>
-            <option value="pune">Pune</option>
-            <option value="mumbai">Mumbai</option>
+            <option value="Aundh">Aundh</option>
+            <option value="Erandwane">Erandwane</option>
+            <option value="Hadapsar">Hadapsar</option>
+            <option value="Hinjewadi">Hinjewadi</option>
+            <option value="Katraj">Katraj</option>
+            <option value="Kharadi">Kharadi</option>
+            <option value="Bund Garden">Bund Garden</option>
           </select>
         </div>
       </div>
@@ -71,19 +84,21 @@
     <section id="jobs">
       <h2 class="text-center mb-4">Available Jobs</h2>
       <div class="row">
-        <div class="col-12 mb-4 data-item" data-category="fullstack" data-location="pune">
+        <div class="col-12 mb-4 data-item" data-category="Pet Sitting or Walking" data-location="Katraj">
           <div class="card">
             <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
             <div class="card-body">
-              <h5 class="card-title">Senior Full Stack Engineer</h5>
-              <p class="card-text">Tarjimly Hot<br>Pune<br>$70k - $130k</p>
+              <h5 class="card-title">Pet Sitting or Walking</h5>
+              <p class="card-text">Tarjimly Hot<br>Katraj</p>
               <div class="d-flex justify-content-between">
-                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details1" aria-expanded="false" aria-controls="details1">
+                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details3" aria-expanded="false" aria-controls="details3">
                   More Info <i class="bi bi-chevron-down"></i>
                 </button>
-                <a href="#" class="btn btn-primary">Apply Now</a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                  Offer to Help
+                </button>
               </div>
-              <div class="collapse mt-3" id="details1">
+              <div class="collapse mt-3" id="details3">
                 <div class="card card-body">
                   <p>Responsibilities include... <br>Requirements include...</p>
                 </div>
@@ -92,17 +107,19 @@
           </div>
         </div>
         
-        <div class="col-12 mb-4 data-item" data-category="manager" data-location="mumbai">
+        <div class="col-12 mb-4 data-item" data-category="Donating Food or Essentials" data-location="Aundh">
           <div class="card">
             <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
             <div class="card-body">
-              <h5 class="card-title">Manager</h5>
-              <p class="card-text">Tarjimly Hot<br>Mumbai<br>$70k - $130k</p>
+              <h5 class="card-title">Donating Food or Essentials</h5>
+              <p class="card-text">Tarjimly Hot<br>Aundh</p>
               <div class="d-flex justify-content-between">
                 <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details2" aria-expanded="false" aria-controls="details2">
                   More Info <i class="bi bi-chevron-down"></i>
                 </button>
-                <a href="#" class="btn btn-primary">Apply Now</a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                  Offer to Help
+                </button>
               </div>
               <div class="collapse mt-3" id="details2">
                 <div class="card card-body">
@@ -113,17 +130,19 @@
           </div>
         </div>
         
-        <div class="col-12 mb-4 data-item" data-category="developer" data-location="pune">
+        <div class="col-12 mb-4 data-item" data-category="Skill Sharing and Education" data-location="Erandwane">
           <div class="card">
             <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
             <div class="card-body">
-              <h5 class="card-title">Developer</h5>
-              <p class="card-text">Tarjimly Hot<br>Pune<br>$70k - $130k</p>
+              <h5 class="card-title">Skill Sharing and Education</h5>
+              <p class="card-text">Tarjimly Hot<br>Erandwane</p>
               <div class="d-flex justify-content-between">
                 <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details3" aria-expanded="false" aria-controls="details3">
                   More Info <i class="bi bi-chevron-down"></i>
                 </button>
-                <a href="#" class="btn btn-primary">Apply Now</a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                  Offer to Help
+                </button>
               </div>
               <div class="collapse mt-3" id="details3">
                 <div class="card card-body">
@@ -134,6 +153,32 @@
           </div>
         </div>
       </div>
+
+
+       <div class="col-12 mb-4 data-item" data-category="Cooking Meals" data-location="Aundh">
+        <div class="card">
+          <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
+          <div class="card-body">
+            <h5 class="card-title">Cooking Meals</h5>
+            <p class="card-text">Tarjimly Hot<br>Aundh</p>
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details2" aria-expanded="false" aria-controls="details2">
+                More Info <i class="bi bi-chevron-down"></i>
+              </button>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                Offer to Help
+              </button>
+            </div>
+            <div class="collapse mt-3" id="details2">
+              <div class="card card-body">
+                <p>Responsibilities include... <br>Requirements include...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </section>
     
     
@@ -143,8 +188,18 @@
         <div class="row align-items-center">
           <div class="col-md-6">
             <h2>About Us</h2>
-            <p class="lead">We are on a mission to connect remote workers with companies worldwide, providing the right opportunities for talented individuals and helping businesses thrive.</p>
-            <p>PuneHelps is dedicated to making remote job opportunities accessible, reliable, and meaningful. We partner with companies across various industries, ensuring a diverse range of opportunities for job seekers.</p>
+            <p class="lead">
+              
+              PuneHelps is a community-driven platform created to bring people together in the spirit of mutual aid and support. Our mission is to connect individuals in Pune who are looking to offer or receive help, whether it’s through volunteering, job opportunities, or sharing resources. 
+              
+              In today’s fast-paced world, neighbors often don’t realize the incredible support network that exists just around the corner. PuneHelps bridges this gap by offering a space where people can post requests for help, browse volunteer opportunities, or offer their skills and resources to others in need. 
+              
+              From assisting the elderly with daily tasks to finding trusted local job listings, PuneHelps empowers individuals to make a difference in their community. Every small act of kindness contributes to building a stronger, more resilient Pune.
+              
+              Join us today and be a part of this growing movement of compassion and collaboration. Together, we can uplift one another and create a community where everyone feels supported.
+              
+              </p>
+            
             <ul class="list-unstyled">
               <li><i class="bi bi-check-circle-fill text-primary"></i> Trusted by thousands of professionals</li>
               <li><i class="bi bi-check-circle-fill text-primary"></i> Connecting workers with companies globally</li>
@@ -254,6 +309,99 @@
       searchFilter.addEventListener("change", filterJobs);
       locationFilter.addEventListener("change", filterJobs);
     });
+
+    document.getElementById('offerHelpForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent the default form submission
+  alert('Your offer to help has been sent successfully!'); // Alert message
+  // Optionally, you can close the modal after submission
+  var modal = bootstrap.Modal.getInstance(document.getElementById('offerHelpModal'));
+  modal.hide();
+});
+
+
+// Function to fetch and display data
+function fetchRequests() {
+  fetch('http://localhost:3000/api/requests')
+    .then(response => response.json())
+    .then(data => {
+      const jobContainer = document.getElementById('jobs'); // Assuming 'jobs' is the container for cards
+      jobContainer.innerHTML = ''; // Clear previous content
+
+      data.forEach(item => {
+        const card = document.createElement('div');
+        card.classList.add('col-12', 'mb-4', 'data-item');
+        card.innerHTML = `
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">${item.name}</h5>
+              <p class="card-text">${item.message}</p>
+              <p class="card-text"><small>${item.email}</small></p>
+            </div>
+          </div>
+        `;
+        jobContainer.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+// Call fetchRequests when the page loads
+window.onload = fetchRequests;
+
+
   </script>
+  <!-- Modal for Offer to Help -->
+<div class="modal fade" id="offerHelpModal" tabindex="-1" aria-labelledby="offerHelpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerHelpModalLabel">Offer to Help</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="offerHelpForm">
+          <input type="text" name="name" placeholder="Full Name" required class="form-control mb-2">
+          <input type="email" name="email" placeholder="Email" required class="form-control mb-2">
+          <textarea name="message" placeholder="Type your Message..." required class="form-control mb-2"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" form="offerHelpForm" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  </script>
+  <!-- Modal for Offer to Help -->
+<div class="modal fade" id="offerHelpModal" tabindex="-1" aria-labelledby="offerHelpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerHelpModalLabel">Offer to Help</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="offerHelpForm">
+          <input type="text" name="name" placeholder="Full Name" required class="form-control mb-2">
+          <input type="email" name="email" placeholder="Email" required class="form-control mb-2">
+          <textarea name="message" placeholder="Type your Message..." required class="form-control mb-2"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" form="offerHelpForm" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

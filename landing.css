@@ -49,7 +49,7 @@ body {
 }
 
 .search-bar input {
-    border: 2px solid #B1A6A4; /* Soft grey border */
+    border: 2px solid #ffffff; /* Soft grey border */
     border-radius: 5px;
     background-color: #D8CFDO; /* Lavender background */
     color: #413F3D; /* Dark grey text */

@@ -59,7 +59,7 @@
       <!-- Form Content -->
       <div class="card shadow p-4 form-content" id="formSection">
         <h1 class="text-center form-title">REQUEST FORM</h1>
-        <form action="your_form_handler.php" method="post" enctype="multipart/form-data">
+        <form action="Untitled-1.php" method="post" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="userId" class="form-label">User ID:</label>
             <input type="text" id="userId" name="userId" class="form-control" required>
@@ -205,6 +205,33 @@
         cameraImagePreview.innerHTML = '<img src="' + imageDataUrl + '" class="img-thumbnail" width="100">';
       });
     });
+    document.querySelector('.contact-form form').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const formData = {
+    name: document.querySelector('input[name="name"]').value,
+    email: document.querySelector('input[name="email"]').value,
+    message: document.querySelector('textarea[name="message"]').value
+  };
+
+  fetch('http://localhost:3000/api/submit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert('Request sent successfully');
+    // Optionally, you can refresh the list of requests after submission
+    fetchRequests();
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+});
+
   </script>
 
 </body>
