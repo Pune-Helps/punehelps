@@ -1,0 +1,22 @@
+# Python files
+*.pyc
+__pycache__/
+
+# Environment variables
+.env
+.venv
+venv/
+
+# SQLite databases
+*.db
+
+# Flask sessions and uploads
+instance/
+uploads/
+
+# Logs and cache
+*.log
+.cache/
+
+# Virtual environments
+venv/
