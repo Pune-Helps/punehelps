@@ -1,0 +1,126 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+/* Global Styles */
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #FFFFF0; /* Ivory background */
+    color: #36454F; /* Charcoal Gray for text */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+    color: #356E6B; /* Deep Teal for headings */
+    margin: 20px 0;
+}
+
+/* Links */
+a {
+    color: #356E6B; /* Deep Teal for links */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #9DBFAF; /* Sage Green on hover */
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn-custom {
+    background-color: #EABDA8; /* Soft Peach for buttons */
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Merriweather', serif;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: #356E6B; /* Deep Teal on hover */
+}
+
+.btn-register {
+    background-color: #9DBFAF; /* Sage Green for the register button */
+}
+
+.btn-register:hover {
+    background-color: #356E6B; /* Deep Teal on hover */
+}
+
+/* Forms */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #9DBFAF; /* Sage Green borders */
+}
+
+.form-control:focus {
+    border-color: #EABDA8; /* Soft Peach on focus */
+    box-shadow: none;
+}
+
+/* Footer and Header */
+header, footer {
+    background-color: #36454F; /* Charcoal Gray */
+    color: #FFFFF0; /* Ivory text */
+    padding: 20px;
+    text-align: center;
+}
+
+/* Call-to-Action */
+.cta {
+    background-color: #EABDA8; /* Soft Peach */
+    color: #36454F; /* Charcoal Gray text */
+    font-family: 'Merriweather', serif;
+    padding: 15px;
+    text-align: center;
+    border-radius: 6px;
+    margin: 20px 0;
+}
+
+.cta:hover {
+    background-color: #9DBFAF; /* Sage Green */
+}
+
+/* Links for OAuth */
+.oauth-link {
+    width: 48%;
+    background-color: #9DBFAF; /* Sage Green */
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    display: inline-block;
+}
+
+.oauth-link:hover {
+    background-color: #356E6B; /* Deep Teal */
+}
+
+/* Primary Elements (Highlighted areas) */
+.primary {
+    background-color: #9DBFAF; /* Sage Green */
+    color: #FFFFF0; /* Ivory for contrast */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Custom Class Overrides */
+.card {
+    border-radius: 16px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    border: 2px solid #9DBFAF;
+}
+
+/* Custom Input Group */
+.input-group-text {
+    background-color: #9DBFAF; /* Sage Green */
+    border: none;
+    color: white;
+    border-radius: 8px;
+}

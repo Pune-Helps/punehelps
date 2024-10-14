@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuneHelps</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+  <div class="photocon">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand" href="#">PuneHelps</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="login.html">Log In</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="requestform.html">Request Help</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container text-center text-white hero-content mt-5">
+        <h1 style="margin-top: 30px;" class="display-4">Be a helping hand for someone</h1>
+        <div class="search-bar mt-4">
+          <input type="text" id="search-input" class="form-control" placeholder="Search">
+          <button type="submit" class="btn btn-primary mt-2">Search</button>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <main class="container mt-5">
+    <!-- Search Filters -->
+    <div class="search-filters row mt-5">
+      <div class="col-md-6 mb-3">
+        <div class="input-group">
+          <label class="input-group-text" for="search-filter"><img src="search logo.jpg" alt="Search" width="20"></label>
+          <select class="form-select" id="search-filter">
+            <option value="all">Select</option>
+            <option value="Cooking Meals">Cooking Meals</option>
+            <option value="Pet Sitting or Walking">Pet Sitting or Walking</option>          
+            <option value="Childcare and Elder Care">Childcare and Elder Care</option>
+            <option value="Tutoring or Homework Help">Tutoring or Homework Help</option>
+            <option value="Donating Food or Essentials">Donating Food or Essentials</option>
+            <option value="Environmental Initiatives">Environmental Initiatives</option>
+            <option value="Recycling Help">Recycling Help</option>
+            <option value="Skill Sharing and Education">Skill Sharing and Education</option>
+            <option value="Exercise or Walking Buddy">Exercise or Walking Buddy</option>
+            <option value="Accompanying to Doctor's">Accompanying to Doctor's</option>
+            <option value="Emergency">Emergency</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="input-group">
+          <label class="input-group-text" for="location-filter"><img src="location logo.jpg" alt="Location" width="20"></label>
+          <select class="form-select" id="location-filter">
+            <option value="all">All</option>
+            <option value="Aundh">Aundh</option>
+            <option value="Erandwane">Erandwane</option>
+            <option value="Hadapsar">Hadapsar</option>
+            <option value="Hinjewadi">Hinjewadi</option>
+            <option value="Katraj">Katraj</option>
+            <option value="Kharadi">Kharadi</option>
+            <option value="Bund Garden">Bund Garden</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Available Jobs Section -->
+    <section id="jobs">
+      <h2 class="text-center mb-4">Available Jobs</h2>
+      <div class="row">
+        <div class="col-12 mb-4 data-item" data-category="Pet Sitting or Walking" data-location="Katraj">
+          <div class="card">
+            <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
+            <div class="card-body">
+              <h5 class="card-title">Pet Sitting or Walking</h5>
+              <p class="card-text">Tarjimly Hot<br>Katraj</p>
+              <div class="d-flex justify-content-between">
+                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details3" aria-expanded="false" aria-controls="details3">
+                  More Info <i class="bi bi-chevron-down"></i>
+                </button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                  Offer to Help
+                </button>
+              </div>
+              <div class="collapse mt-3" id="details3">
+                <div class="card card-body">
+                  <p>Responsibilities include... <br>Requirements include...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-12 mb-4 data-item" data-category="Donating Food or Essentials" data-location="Aundh">
+          <div class="card">
+            <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
+            <div class="card-body">
+              <h5 class="card-title">Donating Food or Essentials</h5>
+              <p class="card-text">Tarjimly Hot<br>Aundh</p>
+              <div class="d-flex justify-content-between">
+                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details2" aria-expanded="false" aria-controls="details2">
+                  More Info <i class="bi bi-chevron-down"></i>
+                </button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                  Offer to Help
+                </button>
+              </div>
+              <div class="collapse mt-3" id="details2">
+                <div class="card card-body">
+                  <p>Responsibilities include... <br>Requirements include...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-12 mb-4 data-item" data-category="Skill Sharing and Education" data-location="Erandwane">
+          <div class="card">
+            <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
+            <div class="card-body">
+              <h5 class="card-title">Skill Sharing and Education</h5>
+              <p class="card-text">Tarjimly Hot<br>Erandwane</p>
+              <div class="d-flex justify-content-between">
+                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details3" aria-expanded="false" aria-controls="details3">
+                  More Info <i class="bi bi-chevron-down"></i>
+                </button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                  Offer to Help
+                </button>
+              </div>
+              <div class="collapse mt-3" id="details3">
+                <div class="card card-body">
+                  <p>Responsibilities include... <br>Requirements include...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+       <div class="col-12 mb-4 data-item" data-category="Cooking Meals" data-location="Aundh">
+        <div class="card">
+          <img src="path/to/company-logo.png" class="card-img-top" alt="Company Logo">
+          <div class="card-body">
+            <h5 class="card-title">Cooking Meals</h5>
+            <p class="card-text">Tarjimly Hot<br>Aundh</p>
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#details2" aria-expanded="false" aria-controls="details2">
+                More Info <i class="bi bi-chevron-down"></i>
+              </button>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offerHelpModal">
+                Offer to Help
+              </button>
+            </div>
+            <div class="collapse mt-3" id="details2">
+              <div class="card card-body">
+                <p>Responsibilities include... <br>Requirements include...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </section>
+    
+    
+
+    <section id="about" class="mt-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h2>About Us</h2>
+            <p class="lead">
+              
+              PuneHelps is a community-driven platform created to bring people together in the spirit of mutual aid and support. Our mission is to connect individuals in Pune who are looking to offer or receive help, whether it’s through volunteering, job opportunities, or sharing resources. 
+              
+              In today’s fast-paced world, neighbors often don’t realize the incredible support network that exists just around the corner. PuneHelps bridges this gap by offering a space where people can post requests for help, browse volunteer opportunities, or offer their skills and resources to others in need. 
+              
+              From assisting the elderly with daily tasks to finding trusted local job listings, PuneHelps empowers individuals to make a difference in their community. Every small act of kindness contributes to building a stronger, more resilient Pune.
+              
+              Join us today and be a part of this growing movement of compassion and collaboration. Together, we can uplift one another and create a community where everyone feels supported.
+              
+              </p>
+            
+            <ul class="list-unstyled">
+              <li><i class="bi bi-check-circle-fill text-primary"></i> Trusted by thousands of professionals</li>
+              <li><i class="bi bi-check-circle-fill text-primary"></i> Connecting workers with companies globally</li>
+              <li><i class="bi bi-check-circle-fill text-primary"></i> Comprehensive support from application to onboarding</li>
+            </ul>
+            <a href="#contact" class="btn btn-primary mt-3">Get in Touch</a>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="path/to/your-image.jpg" class="img-fluid rounded" alt="About Us Image">
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section id="contact" class="mt-5">
+      <div class="contact-section">
+        <div class="contact-details">
+          <h2>Contact Us</h2>
+          <p>
+           we're here for you
+          </p>
+          
+          <div class="contact-info">
+            <div class="info-item">
+              <i class="icon-home"></i>
+              <p><strong>Address</strong><br>LASSi WASSI</p>
+            </div>
+            
+            <div class="info-item">
+              <i class="icon-phone"></i>
+              <p><strong>Phone</strong><br>1122334455</p>
+            </div>
+            
+            <div class="info-item">
+              <i class="icon-envelope"></i>
+              <p><strong>Email</strong><br>punehelps@gmail.com</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="contact-form">
+          <h3>Send Message</h3>
+          <form>
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="message" placeholder="Type your Message..." required></textarea>
+            <button type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+      
+    </section>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <p>© 2024 PUNEHELPS</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts.js"></script>
+  <script>
+    document.getElementById('search-input').addEventListener('input', function() {
+  const query = this.value.toLowerCase();
+  const jobs = document.querySelectorAll(".data-item");
+  
+  jobs.forEach(job => {
+    const title = job.querySelector('.card-title').textContent.toLowerCase();
+    if (title.includes(query)) {
+      job.style.display = "block";
+    } else {
+      job.style.display = "none";
+    }
+  });
+});
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchFilter = document.getElementById("search-filter");
+      const locationFilter = document.getElementById("location-filter");
+
+      function filterJobs() {
+        const selectedCategory = searchFilter.value;
+        const selectedLocation = locationFilter.value;
+
+        // Get all job items
+        const jobs = document.querySelectorAll(".data-item");
+
+        jobs.forEach(job => {
+          const jobCategory = job.getAttribute("data-category");
+          const jobLocation = job.getAttribute("data-location");
+
+          // Show job if it matches the selected filters
+          if ((selectedCategory === "all" || selectedCategory === jobCategory) &&
+              (selectedLocation === "all" || selectedLocation === jobLocation)) {
+            job.style.display = "block";
+          } else {
+            job.style.display = "none";
+          }
+        });
+      }
+      document.querySelector('.contact-form form').addEventListener('submit', function(event) {
+  event.preventDefault();
+  alert('Message sent successfully!');
+});
+
+
+      // Add event listeners to the dropdowns
+      searchFilter.addEventListener("change", filterJobs);
+      locationFilter.addEventListener("change", filterJobs);
+    });
+
+    document.getElementById('offerHelpForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent the default form submission
+  alert('Your offer to help has been sent successfully!'); // Alert message
+  // Optionally, you can close the modal after submission
+  var modal = bootstrap.Modal.getInstance(document.getElementById('offerHelpModal'));
+  modal.hide();
+});
+
+
+// Function to fetch and display data
+function fetchRequests() {
+  fetch('http://localhost:3000/api/requests')
+    .then(response => response.json())
+    .then(data => {
+      const jobContainer = document.getElementById('jobs'); // Assuming 'jobs' is the container for cards
+      jobContainer.innerHTML = ''; // Clear previous content
+
+      data.forEach(item => {
+        const card = document.createElement('div');
+        card.classList.add('col-12', 'mb-4', 'data-item');
+        card.innerHTML = `
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">${item.name}</h5>
+              <p class="card-text">${item.message}</p>
+              <p class="card-text"><small>${item.email}</small></p>
+            </div>
+          </div>
+        `;
+        jobContainer.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+// Call fetchRequests when the page loads
+window.onload = fetchRequests;
+
+
+  </script>
+  <!-- Modal for Offer to Help -->
+<div class="modal fade" id="offerHelpModal" tabindex="-1" aria-labelledby="offerHelpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerHelpModalLabel">Offer to Help</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="offerHelpForm">
+          <input type="text" name="name" placeholder="Full Name" required class="form-control mb-2">
+          <input type="email" name="email" placeholder="Email" required class="form-control mb-2">
+          <textarea name="message" placeholder="Type your Message..." required class="form-control mb-2"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" form="offerHelpForm" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  </script>
+  <!-- Modal for Offer to Help -->
+<div class="modal fade" id="offerHelpModal" tabindex="-1" aria-labelledby="offerHelpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerHelpModalLabel">Offer to Help</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="offerHelpForm">
+          <input type="text" name="name" placeholder="Full Name" required class="form-control mb-2">
+          <input type="email" name="email" placeholder="Email" required class="form-control mb-2">
+          <textarea name="message" placeholder="Type your Message..." required class="form-control mb-2"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" form="offerHelpForm" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
