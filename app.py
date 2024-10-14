@@ -1,48 +1,54 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash
 import pymysql
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Needed for session management
+
+# Database connection setup function
+def get_db_connection():
+    return pymysql.connect(
+        host="ph-db-1.cjkwguo8ka1f.ap-south-1.rds.amazonaws.com",
+        port=3306,
+        user="admin",
+        password="Pune9^0!",
+        db="Punehelps"
+    )
 
 @app.route('/')
 def home():
     return "Welcome to Pune Seva!"
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
-
-
-# Database connection setup (Point 3)
-db_connection = pymysql.connect(
-    host="ph-db-1.cjkwguo8ka1f.ap-south-1.rds.amazonaws.com",
-    port=3306,
-    user="admin",
-    password="Pune9^0!",
-    db="Punehelps"
-)
-cursor = db_connection.cursor()
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
-        password_hash = request.form['password']  # Assuming password is hashed before submission
+        password = request.form['password']  # Get the raw password
         phone_number = request.form['phone']
-        birthdate = request.form['birthdate']  # Capturing birthdate from the form
+        birthdate = request.form['birthdate']
 
-        # SQL Query to insert a new user
+        # Hash the password before storing it
+        password_hash = generate_password_hash(password)
+
+        # SQL query to insert a new user
         sql = """
         INSERT INTO users (username, email, password_hash, phone_number, birthdate)
         VALUES (%s, %s, %s, %s, %s)
         """
-        try:
-            cursor.execute(sql, (username, email, password_hash, phone_number, birthdate))
-            db_connection.commit()
-        except pymysql.MySQLError as e:
-            print("Error: ", e)
-            return "Error during registration"
 
-        return redirect(url_for('login'))  # Redirect to the login page after successful registration
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            cursor.execute(sql, (username, email, password_hash, phone_number, birthdate))
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+            flash('Registration successful!', 'success')
+            return redirect(url_for('login'))
+        except pymysql.MySQLError as e:
+            flash(f'Error during registration: {e}', 'danger')
 
     return render_template('register.html')
 
@@ -50,20 +56,30 @@ def register():
 def login():
     if request.method == 'POST':
         username_or_email = request.form['username']
-        password = request.form['password']  # Hash the password before comparing
+        password = request.form['password']
 
         # SQL query to fetch user by username or email
-        sql = "SELECT * FROM users WHERE (username = %s OR email = %s) AND password_hash = %s"
-        cursor.execute(sql, (username_or_email, username_or_email, password))
-        user = cursor.fetchone()
+        sql = "SELECT * FROM users WHERE username = %s OR email = %s"
 
-        if user:
-            # If user exists and password matches
-            return "Logged in successfully"
-        else:
-            # Login failed
-            return "Invalid username, email, or password"
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            cursor.execute(sql, (username_or_email, username_or_email))
+            user = cursor.fetchone()
+            cursor.close()
+            connection.close()
+
+            if user and check_password_hash(user[3], password):  # Assuming password_hash is in the 4th column
+                flash('Login successful!', 'success')
+                # Here you can set session data or redirect to the home/dashboard page
+                return redirect(url_for('home'))
+            else:
+                flash('Invalid username, email, or password', 'danger')
+
+        except pymysql.MySQLError as e:
+            flash(f'Error during login: {e}', 'danger')
 
     return render_template('login.html')
 
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)

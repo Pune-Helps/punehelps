@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Login - Pune Seva</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <style>
-        /* Additional custom styles */
+        /* Custom Styles */
         .login-container {
             min-height: 100vh;
             display: flex;
@@ -62,7 +61,6 @@
             background-color: #356E6B; /* Deep Teal on hover */
         }
 
-        /* Style for OAuth buttons */
         .oauth-buttons a {
             width: 48%;
             display: flex;
@@ -90,10 +88,11 @@
     </style>
 </head>
 <body>
-<div class="logo-container text-center mb-4">
-    <img src="logo.jpg" alt="Pune Seva Logo" class="img-fluid" style="max-width: 150px;">
-</div>
+
 <div class="container-fluid login-container">
+    <div class="logo-container text-center mb-4">
+        <img src="logo.jpg" alt="Pune Seva Logo" class="img-fluid" style="max-width: 150px;">
+    </div>
     <div class="row g-0 w-100">
         <!-- Image Side -->
         <div class="col-md-6 image-side d-none d-md-block"></div>
@@ -104,15 +103,17 @@
                 <h2>Sign In</h2>
                 <form action="/login" method="post">
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="username" placeholder="Username or Email" required>
+                        <label for="username_or_email" class="form-label">Username or Email</label>
+                        <input type="text" class="form-control" id="username_or_email" name="username_or_email" placeholder="Enter your username or email" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                     </div>
                     <button type="submit" class="btn btn-custom w-100 mb-3">Sign In</button>
                 </form>
 
-                <button class="btn btn-custom btn-register w-100 mb-3" onclick="window.location.href='/register';">Register / Sign Up</button>
+                <a href="/register" class="btn btn-custom btn-register w-100 mb-3">Register / Sign Up</a>
 
                 <div class="d-flex justify-content-between oauth-buttons">
                     <a href="/auth/facebook" class="btn btn-custom">
