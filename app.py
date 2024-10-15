@@ -19,6 +19,37 @@ def get_db_connection():
 def home():
     return "Welcome to Pune Seva!"
 
+@app.route('/')
+def homepage():
+    with db.cursor() as cursor:
+        query = """
+        SELECT id, title, description, category, location, image
+        FROM listings
+        WHERE expiry_date > NOW()
+        ORDER BY created_at DESC
+        """
+        cursor.execute(query)
+        listings = cursor.fetchall()
+    return render_template('landing.html', listings=listings)
+
+@app.route('/search_listings')
+def search_listings():
+    search_term = request.args.get('search', '')
+    with db.cursor() as cursor:
+        query = """
+        SELECT id, title, description, category, location, image
+        FROM listings
+        WHERE title LIKE %s OR description LIKE %s
+        """
+        cursor.execute(query, (f"%{search_term}%", f"%{search_term}%"))
+        listings = cursor.fetchall()
+    return render_template('landing.html', listings=listings)
+
+# Other routes (login, register) go here...
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':

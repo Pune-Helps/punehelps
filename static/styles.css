@@ -124,3 +124,19 @@ header, footer {
     color: white;
     border-radius: 8px;
 }
+
+.parallax-container {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+}
+
+.parallax img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translateZ(0);
+}
