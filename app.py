@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
 import pymysql
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 if __name__ == "__main__":
@@ -47,6 +48,45 @@ def search_listings():
         cursor.execute(query, (f"%{search_term}%", f"%{search_term}%"))
         listings = cursor.fetchall()
     return render_template('landing.html', listings=listings)
+
+@app.route('/submit_help_request', methods=['POST'])
+def submit_help_request():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    
+    # Fetch user details from the database
+    user_id = current_user.id
+    birthdate = current_user.birthdate  # Assuming this is fetched with user details
+    
+    # Check age validation
+    today = datetime.today()
+    age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+    if age < 55:
+        flash("This site is for elder folks to ask for help, please volunteer to help the needy and look for help elsewhere.", "danger")
+        return redirect(url_for('homepage'))
+
+    # Process form data
+    title = request.form['title']
+    description = request.form['description']
+    category = request.form['category'] if request.form['category'] != 'Other' else request.form['other_category']
+    location = request.form['location'] if request.form['location'] != 'Other' else request.form['other_location']
+    urgent = 'urgent' in request.form  # Checkbox value
+    expiry_date = request.form['expiry_date']
+
+    # Insert into listings table
+    cursor = db.cursor()
+    query = """
+    INSERT INTO listings (user_id, title, description, category, location, featured, expiry_date)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """
+    cursor.execute(query, (user_id, title, description, category, location, urgent, expiry_date))
+    db.commit()
+
+    flash('Your help request has been submitted!', 'success')
+    return redirect(url_for('homepage'))
+
+@app.route('/listing_details/<int:listing_id>')
+def listing_details(listing_id):
 
 # Other routes (login, register) go here...
 

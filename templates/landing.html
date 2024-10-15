@@ -17,7 +17,8 @@
         </div>
         <div>
             <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Login</a>
-            <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
+            <a href="{{ url_for('register') }}" class="btn btn-primary me-2">Register</a>
+            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>
         </div>
     </header>
 
@@ -74,6 +75,115 @@
         </div>
     </div>
 
+    <!-- Modal for Request Help -->
+    <div class="modal fade" id="requestHelpModal" tabindex="-1" aria-labelledby="requestHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {% if current_user.is_authenticated %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="requestHelpModalLabel">Request Help</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ url_for('submit_help_request') }}" method="POST">
+                        <div class="modal-body">
+                            <!-- Title Field -->
+                            <div class="mb-3">
+                                <label for="title" class="form-label">What do you need help with?</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                            <!-- Description Field -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Give us more details</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                            </div>
+                            <!-- Category Dropdown -->
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" name="category" onchange="toggleOtherCategory()">
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">
+                            </div>
+                            <!-- Location Dropdown -->
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <select class="form-select" id="location" name="location" onchange="toggleOtherLocation()">
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input type="text" class="form-control mt-2 d-none" id="other_location" name="other_location" placeholder="Enter Other Location">
+                            </div>
+                            <!-- Urgent Checkbox -->
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="urgent" name="urgent">
+                                <label class="form-check-label" for="urgent">Urgent?</label>
+                            </div>
+                            <!-- Expiry Date -->
+                            <div class="mb-3">
+                                <label for="expiry_date" class="form-label">Expiry Date</label>
+                                <input type="date" class="form-control" id="expiry_date" name="expiry_date" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="requestHelpModalLabel">Login Required</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>You must be logged in to request help. Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to continue.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for View Details -->
+    <div class="modal fade" id="viewDetailsModal" tabindex="-1" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewDetailsModalLabel">Listing Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="detailsBody">
+                    <!-- Listing details will be loaded here via JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="helpUser()">I Can Help You</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for showing requester's details -->
+    <div class="modal fade" id="helpDetailsModal" tabindex="-1" aria-labelledby="helpDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpDetailsModalLabel">Thank You!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="helpDetailsBody">
+                    <!-- Help requester's details will be loaded here via JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Footer -->
     <footer class="text-center mt-5 p-3 bg-light">
         <p>&copy; 2024 Pune Seva. All rights reserved.</p>
@@ -81,6 +191,74 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function toggleOtherCategory() {
+            const categorySelect = document.getElementById('category');
+            const otherCategoryInput = document.getElementById('other_category');
+            if (categorySelect.value === 'Other') {
+                otherCategoryInput.classList.remove('d-none');
+            } else {
+                otherCategoryInput.classList.add('d-none');
+            }
+        }
+
+        function toggleOtherLocation() {
+            const locationSelect = document.getElementById('location');
+            const otherLocationInput = document.getElementById('other_location');
+            if (locationSelect.value === 'Other') {
+                otherLocationInput.classList.remove('d-none');
+            } else {
+                otherLocationInput.classList.add('d-none');
+            }
+        }
+
+        function viewDetails(listingId) {
+            // Fetch listing details via AJAX or fetch API
+            fetch(`/listing_details/${listingId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const detailsBody = document.getElementById('detailsBody');
+                    detailsBody.innerHTML = `
+                        <p><strong>Title:</strong> ${data.title}</p>
+                        <p><strong>Description:</strong> ${data.description}</p>
+                        <p><strong>Category:</strong> ${data.category}</p>
+                        <p><strong>Location:</strong> ${data.location}</p>
+                        <p><strong>Urgent:</strong> ${data.featured ? 'Yes' : 'No'}</p>
+                        <p><strong>Expiry Date:</strong> ${new Date(data.expiry_date).toLocaleDateString()}</p>
+                    `;
+                });
+        }
+
+        function helpUser() {
+            // Check if user is logged in
+            fetch('/is_logged_in')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.logged_in) {
+                        // Fetch help requester's details
+                        fetch(`/help_requester_details/${data.listingId}`)
+                            .then(response => response.json())
+                            .then(details => {
+                                const helpDetailsBody = document.getElementById('helpDetailsBody');
+                                helpDetailsBody.innerHTML = `
+                                    <p><strong>Name:</strong> ${details.name}</p>
+                                    <p><strong>Email:</strong> ${details.email}</p>
+                                    <p><strong>Phone Number:</strong> ${details.phone_number}</p>
+                                    <p><strong>Location:</strong> ${details.location}</p>
+                                `;
+                                // Show Thank You modal
+                                const viewDetailsModal = new bootstrap.Modal(document.getElementById('helpDetailsModal'));
+                                viewDetailsModal.show();
+                            });
+                    } else {
+                        // Redirect to login if not logged in
+                        window.location.href = "/login";
+                    }
+                });
+        }
+    </script>
 
 </body>
 </html>
