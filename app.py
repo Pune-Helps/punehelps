@@ -2,6 +2,9 @@ from flask import Flask, request, render_template, redirect, url_for, flash
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Needed for session management
 
@@ -15,9 +18,9 @@ def get_db_connection():
         db="Punehelps"
     )
 
-@app.route('/')
-def home():
-    return "Welcome to Pune Seva!"
+#@app.route('/')
+#def home():
+#    return "Welcome to Pune Seva!"
 
 @app.route('/')
 def homepage():
