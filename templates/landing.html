@@ -1,3 +1,202 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Pune Seva - Home</title>-->
+<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--    &lt;!&ndash; Header &ndash;&gt;-->
+<!--    <header class="d-flex justify-content-between align-items-center p-3">-->
+<!--        <div class="logo">-->
+<!--            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Pune Seva Logo" width="120">-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            {% if current_user.is_authenticated %}-->
+<!--                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger me-2">Logout</a>-->
+<!--                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>-->
+<!--            {% else %}-->
+<!--                <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Login</a>-->
+<!--                <a href="{{ url_for('register') }}" class="btn btn-primary me-2">Register</a>-->
+<!--            {% endif %}-->
+<!--        </div>-->
+<!--    </header>-->
+
+<!--    &lt;!&ndash; Parallax Section &ndash;&gt;-->
+<!--    <div class="parallax-container">-->
+<!--        <div class="parallax">-->
+<!--            <img src="{{ url_for('static', filename='parallax.jpg') }}" alt="Parallax Image" class="w-100">-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Search Bar and Sorting &ndash;&gt;-->
+<!--    <div class="container mt-5">-->
+<!--        <div class="row">-->
+<!--            <div class="col-12 text-center">-->
+<!--                <h2>Find Services or Help Near You</h2>-->
+<!--                <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center mt-3">-->
+<!--                    <input type="text" class="form-control w-50" name="search" placeholder="Search Listings...">-->
+<!--                    <button type="submit" class="btn btn-primary ms-2">Search</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Sorting Options &ndash;&gt;-->
+<!--        <div class="row mt-4">-->
+<!--            <div class="col-12 d-flex justify-content-center">-->
+<!--                <div class="btn-group" role="group" aria-label="Sorting options">-->
+<!--                    <button type="button" class="btn btn-secondary">Newest</button>-->
+<!--                    <button type="button" class="btn btn-secondary">Featured</button>-->
+<!--                    <button type="button" class="btn btn-secondary">Location</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Listings Section &ndash;&gt;-->
+<!--        <div class="row mt-5">-->
+<!--            {% if listings %}-->
+<!--                {% for listing in listings %}-->
+<!--                    <div class="col-md-6 mb-4">-->
+<!--                        <div class="card">-->
+<!--                            <div class="card-body">-->
+<!--                                <h5 class="card-title">{{ listing.title }}</h5>-->
+<!--                                <p class="card-text">{{ listing.description[:100] }}...</p>-->
+<!--                                <p><strong>Category:</strong> {{ listing.category }}</p>-->
+<!--                                <p><strong>Location:</strong> {{ listing.location }}</p>-->
+<!--                                <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>-->
+<!--                                <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>-->
+<!--                                <a href="#" class="btn btn-primary">View Details</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                {% endfor %}-->
+<!--            {% else %}-->
+<!--                <p class="text-center">No listings available at the moment.</p>-->
+<!--            {% endif %}-->
+<!--        </div>-->
+
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Modal for Request Help &ndash;&gt;-->
+<!--&lt;!&ndash; Modal &ndash;&gt;-->
+<!--    <div class="modal fade" id="requestHelpModal" tabindex="-1" aria-labelledby="requestHelpModalLabel" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                {% if current_user.is_authenticated %}-->
+<!--                    &lt;!&ndash; User is authenticated &ndash;&gt;-->
+<!--                    <div class="modal-header">-->
+<!--                        <h5 class="modal-title" id="requestHelpModalLabel">Request Help</h5>-->
+<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                    </div>-->
+<!--                    <form action="{{ url_for('submit_help_request') }}" method="POST">-->
+<!--                        &lt;!&ndash; Optional CSRF token (if using Flask-WTF) &ndash;&gt;-->
+<!--                        <div class="modal-body">-->
+<!--                            &lt;!&ndash; Title Field &ndash;&gt;-->
+<!--                            <div class="mb-3">-->
+<!--                                <label for="title" class="form-label">What do you need help with?</label>-->
+<!--                                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title" required>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Description Field &ndash;&gt;-->
+<!--                            <div class="mb-3">-->
+<!--                                <label for="description" class="form-label">Give us more details</label>-->
+<!--                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter details" required></textarea>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Category Dropdown &ndash;&gt;-->
+<!--                            <div class="mb-3">-->
+<!--                                <label for="category" class="form-label">Category</label>-->
+<!--                                <select class="form-select" id="category" name="category" onchange="toggleOtherCategory()" required>-->
+<!--                                    <option value="Healthcare">Healthcare</option>-->
+<!--                                    <option value="Food">Food</option>-->
+<!--                                    <option value="Transport">Transport</option>-->
+<!--                                    <option value="Other">Other</option>-->
+<!--                                </select>-->
+<!--                                <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Location Dropdown &ndash;&gt;-->
+<!--                            <div class="mb-3">-->
+<!--                                <label for="location" class="form-label">Location</label>-->
+<!--                                <select class="form-select" id="location" name="location" onchange="toggleOtherLocation()" required>-->
+<!--                                    <option value="Pune">Pune</option>-->
+<!--                                    <option value="Mumbai">Mumbai</option>-->
+<!--                                    <option value="Other">Other</option>-->
+<!--                                </select>-->
+<!--                                <input type="text" class="form-control mt-2 d-none" id="other_location" name="other_location" placeholder="Enter Other Location">-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Urgent Checkbox &ndash;&gt;-->
+<!--                            <div class="form-check mb-3">-->
+<!--                                <input class="form-check-input" type="checkbox" id="urgent" name="urgent">-->
+<!--                                <label class="form-check-label" for="urgent">Urgent?</label>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Expiry Date &ndash;&gt;-->
+<!--                            <div class="mb-3">-->
+<!--                                <label for="expiry_date" class="form-label">Expiry Date</label>-->
+<!--                                <input type="date" class="form-control" id="expiry_date" name="expiry_date" required>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="modal-footer">-->
+<!--                            <button type="submit" class="btn btn-primary">Submit Request</button>-->
+<!--                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                {% else %}-->
+<!--                    &lt;!&ndash; User is not authenticated &ndash;&gt;-->
+<!--                    <div class="modal-header">-->
+<!--                        <h5 class="modal-title" id="requestHelpModalLabel">Login Required</h5>-->
+<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body">-->
+<!--                        <p>You must be logged in to request help. Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to continue.</p>-->
+<!--                    </div>-->
+<!--                {% endif %}-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Footer &ndash;&gt;-->
+<!--    <footer class="text-center mt-5 p-3 bg-light">-->
+<!--        <p>&copy; 2024 Pune Seva. All rights reserved.</p>-->
+<!--    </footer>-->
+
+<!--    &lt;!&ndash; Bootstrap JS &ndash;&gt;-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
+
+<!--    &lt;!&ndash; JavaScript for Showing/ Hiding the 'Other' input fields &ndash;&gt;-->
+<!--    <script>-->
+<!--        function toggleOtherCategory() {-->
+<!--            const categorySelect = document.getElementById('category');-->
+<!--            const otherCategoryInput = document.getElementById('other_category');-->
+<!--            if (categorySelect.value === 'Other') {-->
+<!--                otherCategoryInput.classList.remove('d-none');-->
+<!--            } else {-->
+<!--                otherCategoryInput.classList.add('d-none');-->
+<!--            }-->
+<!--        }-->
+
+<!--        function toggleOtherLocation() {-->
+<!--            const locationSelect = document.getElementById('location');-->
+<!--            const otherLocationInput = document.getElementById('other_location');-->
+<!--            if (locationSelect.value === 'Other') {-->
+<!--                otherLocationInput.classList.remove('d-none');-->
+<!--            } else {-->
+<!--                otherLocationInput.classList.add('d-none');-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,25 +206,106 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        header {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        header .logo img {
+            max-width: 150px;
+        }
+
+        .parallax-container {
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .parallax img {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+        }
+
+        .parallax h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            position: absolute;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn-custom {
+            background-color: #FF6F61;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #FF4136;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #FF6F61;
+        }
+
+        .card {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            background-color: #FF6F61;
+            color: white;
+        }
+
+        .modal-footer .btn-primary {
+            background-color: #FF6F61;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Header -->
     <header class="d-flex justify-content-between align-items-center p-3">
         <div class="logo">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Pune Seva Logo" width="120">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Pune Seva Logo">
         </div>
         <div>
-            <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Login</a>
-            <a href="{{ url_for('register') }}" class="btn btn-primary me-2">Register</a>
-            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light me-2">Logout</a>
+                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-outline-light me-2">Login</a>
+                <a href="{{ url_for('register') }}" class="btn btn-light">Register</a>
+            {% endif %}
         </div>
     </header>
 
     <!-- Parallax Section -->
     <div class="parallax-container">
         <div class="parallax">
-            <img src="{{ url_for('static', filename='parallax.jpg') }}" alt="Parallax Image" class="w-100">
+            <img src="{{ url_for('static', filename='parallax.jpg') }}" alt="Parallax Image">
+            <h1>Helping Hands for Pune</h1>
         </div>
     </div>
 
@@ -36,7 +316,7 @@
                 <h2>Find Services or Help Near You</h2>
                 <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center mt-3">
                     <input type="text" class="form-control w-50" name="search" placeholder="Search Listings...">
-                    <button type="submit" class="btn btn-primary ms-2">Search</button>
+                    <button type="submit" class="btn btn-custom ms-2">Search</button>
                 </form>
             </div>
         </div>
@@ -56,15 +336,16 @@
         <div class="row mt-5">
             {% if listings %}
                 {% for listing in listings %}
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card">
-                            <img src="{{ url_for('static', filename=listing.image) }}" class="card-img-top" alt="{{ listing.title }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ listing.title }}</h5>
                                 <p class="card-text">{{ listing.description[:100] }}...</p>
                                 <p><strong>Category:</strong> {{ listing.category }}</p>
                                 <p><strong>Location:</strong> {{ listing.location }}</p>
-                                <a href="#" class="btn btn-primary">View Details</a>
+                                <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>
+                                <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>
+                                <a href="#" class="btn btn-custom">View Details</a>
                             </div>
                         </div>
                     </div>
@@ -80,6 +361,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 {% if current_user.is_authenticated %}
+                    <!-- User is authenticated -->
                     <div class="modal-header">
                         <h5 class="modal-title" id="requestHelpModalLabel">Request Help</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -89,17 +371,19 @@
                             <!-- Title Field -->
                             <div class="mb-3">
                                 <label for="title" class="form-label">What do you need help with?</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
+                                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title" required>
                             </div>
+
                             <!-- Description Field -->
                             <div class="mb-3">
                                 <label for="description" class="form-label">Give us more details</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter details" required></textarea>
                             </div>
+
                             <!-- Category Dropdown -->
                             <div class="mb-3">
                                 <label for="category" class="form-label">Category</label>
-                                <select class="form-select" id="category" name="category" onchange="toggleOtherCategory()">
+                                <select class="form-select" id="category" name="category" onchange="toggleOtherCategory()" required>
                                     <option value="Healthcare">Healthcare</option>
                                     <option value="Food">Food</option>
                                     <option value="Transport">Transport</option>
@@ -107,33 +391,38 @@
                                 </select>
                                 <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">
                             </div>
+
                             <!-- Location Dropdown -->
                             <div class="mb-3">
                                 <label for="location" class="form-label">Location</label>
-                                <select class="form-select" id="location" name="location" onchange="toggleOtherLocation()">
+                                <select class="form-select" id="location" name="location" onchange="toggleOtherLocation()" required>
                                     <option value="Pune">Pune</option>
                                     <option value="Mumbai">Mumbai</option>
                                     <option value="Other">Other</option>
                                 </select>
                                 <input type="text" class="form-control mt-2 d-none" id="other_location" name="other_location" placeholder="Enter Other Location">
                             </div>
+
                             <!-- Urgent Checkbox -->
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" id="urgent" name="urgent">
                                 <label class="form-check-label" for="urgent">Urgent?</label>
                             </div>
+
                             <!-- Expiry Date -->
                             <div class="mb-3">
                                 <label for="expiry_date" class="form-label">Expiry Date</label>
                                 <input type="date" class="form-control" id="expiry_date" name="expiry_date" required>
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Submit Request</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
                 {% else %}
+                    <!-- User is not authenticated -->
                     <div class="modal-header">
                         <h5 class="modal-title" id="requestHelpModalLabel">Login Required</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -146,44 +435,6 @@
         </div>
     </div>
 
-    <!-- Modal for View Details -->
-    <div class="modal fade" id="viewDetailsModal" tabindex="-1" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewDetailsModalLabel">Listing Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="detailsBody">
-                    <!-- Listing details will be loaded here via JavaScript -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="helpUser()">I Can Help You</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for showing requester's details -->
-    <div class="modal fade" id="helpDetailsModal" tabindex="-1" aria-labelledby="helpDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="helpDetailsModalLabel">Thank You!</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="helpDetailsBody">
-                    <!-- Help requester's details will be loaded here via JavaScript -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Footer -->
     <footer class="text-center mt-5 p-3 bg-light">
         <p>&copy; 2024 Pune Seva. All rights reserved.</p>
@@ -192,7 +443,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript for Showing/ Hiding the 'Other' input fields -->
     <script>
         function toggleOtherCategory() {
             const categorySelect = document.getElementById('category');
@@ -214,51 +465,8 @@
             }
         }
 
-        function viewDetails(listingId) {
-            // Fetch listing details via AJAX or fetch API
-            fetch(`/listing_details/${listingId}`)
-                .then(response => response.json())
-                .then(data => {
-                    const detailsBody = document.getElementById('detailsBody');
-                    detailsBody.innerHTML = `
-                        <p><strong>Title:</strong> ${data.title}</p>
-                        <p><strong>Description:</strong> ${data.description}</p>
-                        <p><strong>Category:</strong> ${data.category}</p>
-                        <p><strong>Location:</strong> ${data.location}</p>
-                        <p><strong>Urgent:</strong> ${data.featured ? 'Yes' : 'No'}</p>
-                        <p><strong>Expiry Date:</strong> ${new Date(data.expiry_date).toLocaleDateString()}</p>
-                    `;
-                });
-        }
-
-        function helpUser() {
-            // Check if user is logged in
-            fetch('/is_logged_in')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.logged_in) {
-                        // Fetch help requester's details
-                        fetch(`/help_requester_details/${data.listingId}`)
-                            .then(response => response.json())
-                            .then(details => {
-                                const helpDetailsBody = document.getElementById('helpDetailsBody');
-                                helpDetailsBody.innerHTML = `
-                                    <p><strong>Name:</strong> ${details.name}</p>
-                                    <p><strong>Email:</strong> ${details.email}</p>
-                                    <p><strong>Phone Number:</strong> ${details.phone_number}</p>
-                                    <p><strong>Location:</strong> ${details.location}</p>
-                                `;
-                                // Show Thank You modal
-                                const viewDetailsModal = new bootstrap.Modal(document.getElementById('helpDetailsModal'));
-                                viewDetailsModal.show();
-                            });
-                    } else {
-                        // Redirect to login if not logged in
-                        window.location.href = "/login";
-                    }
-                });
-        }
     </script>
 
 </body>
 </html>
+

@@ -1,159 +1,173 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
-import pymysql
-from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Needed for session management
 
-# Database connection setup function
-def get_db_connection():
-    return pymysql.connect(
-        host="ph-db-1.cjkwguo8ka1f.ap-south-1.rds.amazonaws.com",
-        port=3306,
-        user="admin",
-        password="Pune9^0!",
-        db="Punehelps"
-    )
+# SQLite database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-#@app.route('/')
-#def home():
-#    return "Welcome to Pune Seva!"
+# Flask-Login setup
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
+# Database model for User
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
+    phone_number = db.Column(db.String(15), nullable=True)
+    birthdate = db.Column(db.Date, nullable=False)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+class Listing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    urgent = db.Column(db.Boolean, default=False)
+    expiry_date = db.Column(db.Date, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+
+# Create the tables if they don't exist
+with app.app_context():
+    db.create_all()
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 @app.route('/')
-def homepage():
-    with db.cursor() as cursor:
-        query = """
-        SELECT id, title, description, category, location, image
-        FROM listings
-        WHERE expiry_date > NOW()
-        ORDER BY created_at DESC
-        """
-        cursor.execute(query)
-        listings = cursor.fetchall()
-    return render_template('landing.html', listings=listings)
-
-@app.route('/search_listings')
-def search_listings():
-    search_term = request.args.get('search', '')
-    with db.cursor() as cursor:
-        query = """
-        SELECT id, title, description, category, location, image
-        FROM listings
-        WHERE title LIKE %s OR description LIKE %s
-        """
-        cursor.execute(query, (f"%{search_term}%", f"%{search_term}%"))
-        listings = cursor.fetchall()
-    return render_template('landing.html', listings=listings)
-
-@app.route('/submit_help_request', methods=['POST'])
-def submit_help_request():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
-    
-    # Fetch user details from the database
-    user_id = current_user.id
-    birthdate = current_user.birthdate  # Assuming this is fetched with user details
-    
-    # Check age validation
-    today = datetime.today()
-    age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
-    if age < 55:
-        flash("This site is for elder folks to ask for help, please volunteer to help the needy and look for help elsewhere.", "danger")
-        return redirect(url_for('homepage'))
-
-    # Process form data
-    title = request.form['title']
-    description = request.form['description']
-    category = request.form['category'] if request.form['category'] != 'Other' else request.form['other_category']
-    location = request.form['location'] if request.form['location'] != 'Other' else request.form['other_location']
-    urgent = 'urgent' in request.form  # Checkbox value
-    expiry_date = request.form['expiry_date']
-
-    # Insert into listings table
-    cursor = db.cursor()
-    query = """
-    INSERT INTO listings (user_id, title, description, category, location, featured, expiry_date)
-    VALUES (%s, %s, %s, %s, %s, %s, %s)
-    """
-    cursor.execute(query, (user_id, title, description, category, location, urgent, expiry_date))
-    db.commit()
-
-    flash('Your help request has been submitted!', 'success')
+def home():
     return redirect(url_for('homepage'))
 
-@app.route('/listing_details/<int:listing_id>')
-def listing_details(listing_id):
-
-# Other routes (login, register) go here...
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']  # Get the raw password
-        phone_number = request.form['phone']
-        birthdate = request.form['birthdate']
+        # Get form data
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        phone_number = request.form.get('phone')
+        birthdate = request.form.get('birthdate')
 
         # Hash the password before storing it
         password_hash = generate_password_hash(password)
 
-        # SQL query to insert a new user
-        sql = """
-        INSERT INTO users (username, email, password_hash, phone_number, birthdate)
-        VALUES (%s, %s, %s, %s, %s)
-        """
+        # Create new user
+        new_user = User(username=username, email=email, phone_number=phone_number,
+                        birthdate=datetime.strptime(birthdate, '%Y-%m-%d'))
+        new_user.set_password(password)
 
         try:
-            connection = get_db_connection()
-            cursor = connection.cursor()
-            cursor.execute(sql, (username, email, password_hash, phone_number, birthdate))
-            connection.commit()
-            cursor.close()
-            connection.close()
+            db.session.add(new_user)
+            db.session.commit()
 
             flash('Registration successful!', 'success')
             return redirect(url_for('login'))
-        except pymysql.MySQLError as e:
+        except Exception as e:
+            db.session.rollback()
             flash(f'Error during registration: {e}', 'danger')
+            return render_template('register.html')
 
     return render_template('register.html')
+
+
+@app.route('/search_listings')
+def search_listings():
+    search_term = request.args.get('search', '')
+
+    # Query the database for listings that match the search term in title or description
+    filtered_listings = Listing.query.filter(
+        (Listing.title.ilike(f'%{search_term}%')) | (Listing.description.ilike(f'%{search_term}%'))
+    ).all()
+
+    return render_template('landing.html', listings=filtered_listings)
+
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username_or_email = request.form['username']
-        password = request.form['password']
+        username_or_email = request.form.get('username_or_email')
+        password = request.form.get('password')
 
-        # SQL query to fetch user by username or email
-        sql = "SELECT * FROM users WHERE username = %s OR email = %s"
+        # Fetch user by username or email
+        user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email)).first()
 
-        try:
-            connection = get_db_connection()
-            cursor = connection.cursor()
-            cursor.execute(sql, (username_or_email, username_or_email))
-            user = cursor.fetchone()
-            cursor.close()
-            connection.close()
-
-            if user and check_password_hash(user[3], password):  # Assuming password_hash is in the 4th column
-                flash('Login successful!', 'success')
-                # Here you can set session data or redirect to the home/dashboard page
-                return redirect(url_for('home'))
-            else:
-                flash('Invalid username, email, or password', 'danger')
-
-        except pymysql.MySQLError as e:
-            flash(f'Error during login: {e}', 'danger')
+        if user and user.check_password(password):
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('homepage'))
+        else:
+            flash('Invalid username, email, or password', 'danger')
 
     return render_template('login.html')
 
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('login'))
+
+
+@app.route('/lending_page')
+@login_required
+def homepage():
+    # Fetch all active listings from the database (before the expiry date)
+    listings = Listing.query.filter(Listing.expiry_date >= datetime.today()).order_by(Listing.created_at.desc()).all()
+
+    return render_template('landing.html', listings=listings)
+
+
+@app.route('/submit_help_request', methods=['POST'])
+@login_required
+def submit_help_request():
+    # Fetch user details from the database
+    user_id = current_user.id
+
+    # Process form data
+    title = request.form.get('title')
+    description = request.form.get('description')
+    category = request.form.get('category')
+    location = request.form.get('location')
+    urgent = 'urgent' in request.form  # Checkbox value
+    expiry_date = datetime.strptime(request.form.get('expiry_date'), '%Y-%m-%d')
+
+    # Save to the database
+    new_listing = Listing(user_id=user_id, title=title, description=description, category=category,
+                          location=location, urgent=urgent, expiry_date=expiry_date)
+    db.session.add(new_listing)
+    db.session.commit()
+
+    flash('Your help request has been submitted!', 'success')
+    return redirect(url_for('homepage'))
+
+
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)

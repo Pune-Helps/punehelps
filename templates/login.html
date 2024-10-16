@@ -15,7 +15,7 @@
         }
 
         .image-side {
-            background: url('your-photo.jpg') no-repeat center center;
+            background: url('your-image.jpg') no-repeat center center;
             background-size: cover;
         }
 
@@ -101,6 +101,21 @@
         <div class="col-md-6 d-flex justify-content-center align-items-center">
             <div class="login-form text-center">
                 <h2>Sign In</h2>
+
+                <!-- Flash messages to display errors -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alert-container">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
                 <form action="/login" method="post">
                     <div class="mb-3">
                         <label for="username_or_email" class="form-label">Username or Email</label>
@@ -130,5 +145,19 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Auto-hide flash messages after 2 seconds
+    setTimeout(function() {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            var alertInstance = bootstrap.Alert.getInstance(alert);
+            if (alertInstance) {
+                alertInstance.close();
+            }
+        });
+    }, 2000); // 2 seconds
+</script>
+
 </body>
 </html>

@@ -8,7 +8,7 @@ __pycache__/
 venv/
 
 # SQLite databases
-*.db
+#*.db
 
 # Flask sessions and uploads
 instance/
