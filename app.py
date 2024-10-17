@@ -7,11 +7,11 @@ import os
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Needed for session management
 
-DB_USERNAME = os.getenv('DB_USERNAME')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_HOST = os.getenv('DB_HOST')
-DB_PORT = os.getenv('DB_PORT')
-DB_NAME = os.getenv('DB_NAME')
+DB_USERNAME="admin"
+DB_PASSWORD="Pune9^0!"
+DB_HOST="ph-db-2.cpukwqkiuiyg.us-east-2.rds.amazonaws.com"
+DB_PORT="3306"
+DB_NAME="pune_seva"
 
 # SQLite database configuration
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.db'
