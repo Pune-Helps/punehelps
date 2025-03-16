@@ -345,7 +345,7 @@
                                 <p><strong>Location:</strong> {{ listing.location }}</p>
                                 <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>
                                 <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>
-                                <a href="#" class="btn btn-custom">View Details</a>
+                                <a href="#" class="btn btn-primary view-details-btn" data-bs-toggle="modal" data-bs-target="#detailsModal">View Details</a>
                             </div>
                         </div>
                     </div>
@@ -355,6 +355,8 @@
             {% endif %}
         </div>
     </div>
+
+    
 
     <!-- Modal for Request Help -->
     <div class="modal fade" id="requestHelpModal" tabindex="-1" aria-labelledby="requestHelpModalLabel" aria-hidden="true">
@@ -438,6 +440,26 @@
             </div>
         </div>
     </div>
+    <!-- Request Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Request Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Title:</strong> <span id="modalTitle"></span></p>
+                <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+                <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+                <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Footer -->
     <footer class="text-center mt-5 p-3 bg-light">
@@ -468,6 +490,18 @@
                 otherLocationInput.classList.add('d-none');
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".view-details-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let card = this.closest(".card");
+                document.getElementById("modalTitle").textContent = card.querySelector(".card-title").textContent;
+                document.getElementById("modalDescription").textContent = card.querySelector(".card-text").textContent;
+                document.getElementById("modalCategory").textContent = card.getAttribute("data-category") || "N/A";
+                document.getElementById("modalLocation").textContent = card.getAttribute("data-location") || "N/A";
+            });
+        });
+    });
 
     </script>
 
