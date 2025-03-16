@@ -36,6 +36,10 @@ class User(db.Model):
     birthdate = db.Column(db.Date, nullable=False)
     govt_id_type = db.Column(db.String(50), nullable=False)  # NEW FIELD
     govt_id_number = db.Column(db.String(50), nullable=False)  # NEW FIELD
+    
+    @property
+    def is_active(self):
+        return True
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
