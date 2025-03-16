@@ -114,6 +114,21 @@
                         <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
                     </div>
                     <div class="mb-3">
+                        <label for="govt_id_type" class="form-label">Government ID Type</label>
+                        <select class="form-select" id="govt_id_type" name="govt_id_type" required>
+                            <option value="" selected disabled>Select ID Type</option>
+                            <option value="Aadhar">Aadhar Card</option>
+                            <option value="PAN">PAN Card</option>
+                            <option value="Voter">Voter ID</option>
+                            <option value="Driving License">Driving License</option>
+                            <option value="Passport">Passport</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="govt_id_number" class="form-label">Government ID Number</label>
+                        <input type="text" class="form-control" id="govt_id_number" name="govt_id_number" required>
+                    </div>
+                    <div class="mb-3">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                     </div>
                     <div class="mb-3">

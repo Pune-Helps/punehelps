@@ -26,13 +26,16 @@ login_manager.login_view = 'login'
 
 
 # Database model for User
-class User(UserMixin, db.Model):
+
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    email = db.Column(db.String(150), unique=True, nullable=False)
+    username = db.Column(db.String(150), nullable=False, unique=True)
+    email = db.Column(db.String(150), nullable=False, unique=True)
     password_hash = db.Column(db.String(200), nullable=False)
-    phone_number = db.Column(db.String(15), nullable=True)
+    phone_number = db.Column(db.String(15))
     birthdate = db.Column(db.Date, nullable=False)
+    govt_id_type = db.Column(db.String(50), nullable=False)  # NEW FIELD
+    govt_id_number = db.Column(db.String(50), nullable=False)  # NEW FIELD
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -77,6 +80,8 @@ def register():
         password = request.form.get('password')
         phone_number = request.form.get('phone')
         birthdate = request.form.get('birthdate')
+        govt_id_type=request.form.get('govt_id_type'),  # NEW FIELD
+        govt_id_number=request.form.get('govt_id_number')  # NEW FIELD
 
         # Hash the password before storing it
         password_hash = generate_password_hash(password)
