@@ -146,7 +146,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/lending_page')
+@app.route('/landing_page')
 @login_required
 def homepage():
     # Fetch all active listings from the database (before the expiry date)

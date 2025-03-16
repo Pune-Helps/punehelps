@@ -370,26 +370,30 @@
                         <div class="modal-body">
                             <!-- Title Field -->
                             <div class="mb-3">
-                                <label for="title" class="form-label">What do you need help with?</label>
-                                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title" required>
-                            </div>
+                                <label for="help_category" class="form-label">What do you need help with?</label>
+                                <select class="form-select" id="help_category" name="help_category" required>
+                                    <option value="" selected disabled>Select a Category</option>
+                                    <option value="Medical Assistance">Medical Assistance</option>
+                                    <option value="Food Supply">Food Supply</option>
+        <option value="Shelter Needed">Shelter Needed</option>
+        <option value="Legal Assistance">Legal Assistance</option>
+        <option value="Financial Aid">Financial Aid</option>
+        <option value="Transport Assistance">Transport Assistance</option>
+        <option value="Educational Support">Educational Support</option>
+        <option value="Elderly Care">Elderly Care</option>
+        <option value="Job Assistance">Job Assistance</option>
+        <option value="Mental Health Support">Mental Health Support</option>
+        <option value="Disaster Relief">Disaster Relief</option>
+        <option value="Animal Rescue">Animal Rescue</option>
+        <option value="Other">Other</option>
+    </select>
+    <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">
+</div>
 
                             <!-- Description Field -->
                             <div class="mb-3">
                                 <label for="description" class="form-label">Give us more details</label>
                                 <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter details" required></textarea>
-                            </div>
-
-                            <!-- Category Dropdown -->
-                            <div class="mb-3">
-                                <label for="category" class="form-label">Category</label>
-                                <select class="form-select" id="category" name="category" onchange="toggleOtherCategory()" required>
-                                    <option value="Healthcare">Healthcare</option>
-                                    <option value="Food">Food</option>
-                                    <option value="Transport">Transport</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">
                             </div>
 
                             <!-- Location Dropdown -->
