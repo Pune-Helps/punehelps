@@ -37,6 +37,10 @@ class User(db.Model):
     govt_id_type = db.Column(db.String(50), nullable=False)  # NEW FIELD
     govt_id_number = db.Column(db.String(50), nullable=False)  # NEW FIELD
     
+
+    def get_id(self):
+        return str(self.id)
+        
     @property
     def is_active(self):
         return True
