@@ -30,14 +30,14 @@ login_manager.login_view = 'login'
 # Database model for User
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), nullable=False, unique=True)
-    email = db.Column(db.String(150), nullable=False, unique=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
-    phone_number = db.Column(db.String(15))
+    phone_number = db.Column(db.String(15), nullable=True)
     birthdate = db.Column(db.Date, nullable=False)
-    govt_id_type = db.Column(db.String(50), nullable=False)  # NEW FIELD
-    govt_id_number = db.Column(db.String(50), nullable=False)  # NEW FIELD
+    govt_id_type = db.Column(db.String(50), nullable=False, default="")
+    govt_id_number = db.Column(db.String(50), nullable=False, default="")
     
 
     def get_id(self):
@@ -54,16 +54,16 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 class Listing(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(100), nullable=False)
-    location = db.Column(db.String(100), nullable=False)
-    urgent = db.Column(db.Boolean, default=False)
-    expiry_date = db.Column(db.Date, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     other_category = db.Column(db.String(255), nullable=True)
+    location = db.Column(db.String(100), nullable=False)
+    urgent = db.Column(db.Boolean, nullable=True, default=False)
+    expiry_date = db.Column(db.Date, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=True)
 
 # Define the relationship to fix the error
 user = db.relationship('User', backref='listings', lazy=True)
