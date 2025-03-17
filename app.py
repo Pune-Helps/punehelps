@@ -66,7 +66,7 @@ class Listing(db.Model):
     created_at = db.Column(db.DateTime, nullable=True)
 
 # Define the relationship to fix the error
-user = db.relationship('User', backref='listings', lazy=True)
+user = db.relationship('User', backref=db.backref('listings', lazy=True))
 
 # Create the tables if they don't exist
 with app.app_context():
