@@ -66,7 +66,7 @@ class Listing(db.Model):
     other_category = db.Column(db.String(255), nullable=True)
 
 # Define the relationship to fix the error
-user = relationship("User", backref="listings")
+user = db.relationship('User', backref='listings', lazy=True)
 
 # Create the tables if they don't exist
 with app.app_context():
