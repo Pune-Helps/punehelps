@@ -1,202 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Pune Seva - Home</title>-->
-<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">-->
-<!--    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">-->
-<!--</head>-->
-<!--<body>-->
-
-<!--    &lt;!&ndash; Header &ndash;&gt;-->
-<!--    <header class="d-flex justify-content-between align-items-center p-3">-->
-<!--        <div class="logo">-->
-<!--            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Pune Seva Logo" width="120">-->
-<!--        </div>-->
-<!--        <div>-->
-<!--            {% if current_user.is_authenticated %}-->
-<!--                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger me-2">Logout</a>-->
-<!--                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>-->
-<!--            {% else %}-->
-<!--                <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Login</a>-->
-<!--                <a href="{{ url_for('register') }}" class="btn btn-primary me-2">Register</a>-->
-<!--            {% endif %}-->
-<!--        </div>-->
-<!--    </header>-->
-
-<!--    &lt;!&ndash; Parallax Section &ndash;&gt;-->
-<!--    <div class="parallax-container">-->
-<!--        <div class="parallax">-->
-<!--            <img src="{{ url_for('static', filename='parallax.jpg') }}" alt="Parallax Image" class="w-100">-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Search Bar and Sorting &ndash;&gt;-->
-<!--    <div class="container mt-5">-->
-<!--        <div class="row">-->
-<!--            <div class="col-12 text-center">-->
-<!--                <h2>Find Services or Help Near You</h2>-->
-<!--                <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center mt-3">-->
-<!--                    <input type="text" class="form-control w-50" name="search" placeholder="Search Listings...">-->
-<!--                    <button type="submit" class="btn btn-primary ms-2">Search</button>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; Sorting Options &ndash;&gt;-->
-<!--        <div class="row mt-4">-->
-<!--            <div class="col-12 d-flex justify-content-center">-->
-<!--                <div class="btn-group" role="group" aria-label="Sorting options">-->
-<!--                    <button type="button" class="btn btn-secondary">Newest</button>-->
-<!--                    <button type="button" class="btn btn-secondary">Featured</button>-->
-<!--                    <button type="button" class="btn btn-secondary">Location</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; Listings Section &ndash;&gt;-->
-<!--        <div class="row mt-5">-->
-<!--            {% if listings %}-->
-<!--                {% for listing in listings %}-->
-<!--                    <div class="col-md-6 mb-4">-->
-<!--                        <div class="card">-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">{{ listing.title }}</h5>-->
-<!--                                <p class="card-text">{{ listing.description[:100] }}...</p>-->
-<!--                                <p><strong>Category:</strong> {{ listing.category }}</p>-->
-<!--                                <p><strong>Location:</strong> {{ listing.location }}</p>-->
-<!--                                <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>-->
-<!--                                <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>-->
-<!--                                <a href="#" class="btn btn-primary">View Details</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                {% endfor %}-->
-<!--            {% else %}-->
-<!--                <p class="text-center">No listings available at the moment.</p>-->
-<!--            {% endif %}-->
-<!--        </div>-->
-
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Modal for Request Help &ndash;&gt;-->
-<!--&lt;!&ndash; Modal &ndash;&gt;-->
-<!--    <div class="modal fade" id="requestHelpModal" tabindex="-1" aria-labelledby="requestHelpModalLabel" aria-hidden="true">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--                {% if current_user.is_authenticated %}-->
-<!--                    &lt;!&ndash; User is authenticated &ndash;&gt;-->
-<!--                    <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="requestHelpModalLabel">Request Help</h5>-->
-<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                    </div>-->
-<!--                    <form action="{{ url_for('submit_help_request') }}" method="POST">-->
-<!--                        &lt;!&ndash; Optional CSRF token (if using Flask-WTF) &ndash;&gt;-->
-<!--                        <div class="modal-body">-->
-<!--                            &lt;!&ndash; Title Field &ndash;&gt;-->
-<!--                            <div class="mb-3">-->
-<!--                                <label for="title" class="form-label">What do you need help with?</label>-->
-<!--                                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title" required>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Description Field &ndash;&gt;-->
-<!--                            <div class="mb-3">-->
-<!--                                <label for="description" class="form-label">Give us more details</label>-->
-<!--                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter details" required></textarea>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Category Dropdown &ndash;&gt;-->
-<!--                            <div class="mb-3">-->
-<!--                                <label for="category" class="form-label">Category</label>-->
-<!--                                <select class="form-select" id="category" name="category" onchange="toggleOtherCategory()" required>-->
-<!--                                    <option value="Healthcare">Healthcare</option>-->
-<!--                                    <option value="Food">Food</option>-->
-<!--                                    <option value="Transport">Transport</option>-->
-<!--                                    <option value="Other">Other</option>-->
-<!--                                </select>-->
-<!--                                <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Location Dropdown &ndash;&gt;-->
-<!--                            <div class="mb-3">-->
-<!--                                <label for="location" class="form-label">Location</label>-->
-<!--                                <select class="form-select" id="location" name="location" onchange="toggleOtherLocation()" required>-->
-<!--                                    <option value="Pune">Pune</option>-->
-<!--                                    <option value="Mumbai">Mumbai</option>-->
-<!--                                    <option value="Other">Other</option>-->
-<!--                                </select>-->
-<!--                                <input type="text" class="form-control mt-2 d-none" id="other_location" name="other_location" placeholder="Enter Other Location">-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Urgent Checkbox &ndash;&gt;-->
-<!--                            <div class="form-check mb-3">-->
-<!--                                <input class="form-check-input" type="checkbox" id="urgent" name="urgent">-->
-<!--                                <label class="form-check-label" for="urgent">Urgent?</label>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Expiry Date &ndash;&gt;-->
-<!--                            <div class="mb-3">-->
-<!--                                <label for="expiry_date" class="form-label">Expiry Date</label>-->
-<!--                                <input type="date" class="form-control" id="expiry_date" name="expiry_date" required>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="modal-footer">-->
-<!--                            <button type="submit" class="btn btn-primary">Submit Request</button>-->
-<!--                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                {% else %}-->
-<!--                    &lt;!&ndash; User is not authenticated &ndash;&gt;-->
-<!--                    <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="requestHelpModalLabel">Login Required</h5>-->
-<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                    </div>-->
-<!--                    <div class="modal-body">-->
-<!--                        <p>You must be logged in to request help. Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to continue.</p>-->
-<!--                    </div>-->
-<!--                {% endif %}-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Footer &ndash;&gt;-->
-<!--    <footer class="text-center mt-5 p-3 bg-light">-->
-<!--        <p>&copy; 2024 Pune Seva. All rights reserved.</p>-->
-<!--    </footer>-->
-
-<!--    &lt;!&ndash; Bootstrap JS &ndash;&gt;-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
-
-<!--    &lt;!&ndash; JavaScript for Showing/ Hiding the 'Other' input fields &ndash;&gt;-->
-<!--    <script>-->
-<!--        function toggleOtherCategory() {-->
-<!--            const categorySelect = document.getElementById('category');-->
-<!--            const otherCategoryInput = document.getElementById('other_category');-->
-<!--            if (categorySelect.value === 'Other') {-->
-<!--                otherCategoryInput.classList.remove('d-none');-->
-<!--            } else {-->
-<!--                otherCategoryInput.classList.add('d-none');-->
-<!--            }-->
-<!--        }-->
-
-<!--        function toggleOtherLocation() {-->
-<!--            const locationSelect = document.getElementById('location');-->
-<!--            const otherLocationInput = document.getElementById('other_location');-->
-<!--            if (locationSelect.value === 'Other') {-->
-<!--                otherLocationInput.classList.remove('d-none');-->
-<!--            } else {-->
-<!--                otherLocationInput.classList.add('d-none');-->
-<!--            }-->
-<!--        }-->
-<!--    </script>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -341,7 +142,13 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ listing.title }}</h5>
                                 <p class="card-text">{{ listing.description[:100] }}...</p>
-                                <p><strong>Category:</strong> {{ listing.category }}</p>
+                                <p><strong>Category:</strong> 
+                                    {% if listing.category == "Other" and listing.other_category %}
+                                        {{ listing.other_category }}
+                                    {% else %}
+                                        {{ listing.category }}
+                                    {% endif %}
+                                </p>
                                 <p><strong>Location:</strong> {{ listing.location }}</p>
                                 <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>
                                 <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>
@@ -370,10 +177,10 @@
                     </div>
                     <form action="{{ url_for('submit_help_request') }}" method="POST">
                         <div class="modal-body">
-                            <!-- Title Field -->
+                            <!-- Title Category Field -->
                             <div class="mb-3">
-                                <label for="help_category" class="form-label">What do you need help with?</label>
-                                <select class="form-select" id="help_category" name="help_category" required>
+                                <label for="category" class="form-label">What do you need help with?</label>
+                                <select class="form-select" id="category" name="category" required>
                                     <option value="" selected disabled>Select a Category</option>
                                     <option value="Medical Assistance">Medical Assistance</option>
                                     <option value="Food Supply">Food Supply</option>
@@ -390,6 +197,12 @@
         <option value="Other">Other</option>
     </select>
     <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">
+</div>
+
+<!-- Title Field -->
+<div class="mb-3">
+    <label for="title" class="form-label">What title do you want on your ad?</label>
+    <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title" required>
 </div>
 
                             <!-- Description Field -->
@@ -440,7 +253,7 @@
             </div>
         </div>
     </div>
-    <!-- Request Details Modal -->
+    <!--  Details Modal -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -449,10 +262,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Title:</strong> <span id="modalTitle"></span></p>
-                <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-                <p><strong>Category:</strong> <span id="modalCategory"></span></p>
-                <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+                <p><strong>Title:</strong> {{ listing.title }}</p>
+                <p><strong>Description:</strong> {{ listing.description }}</p>
+                
+                <p><strong>Category:</strong> 
+                    {% if listing.category == "Other" and listing.other_category %}
+                        {{ listing.other_category }}
+                    {% else %}
+                        {{ listing.category }}
+                    {% endif %}
+                </p>
+            
+                <p><strong>Location:</strong> {{ listing.location }}</p>
+                <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>
+                <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>
+                
+                <hr>
+                
+                <p><strong>Requester:</strong> {{ listing.user.username }}</p>
+                <p><strong>Contact Number:</strong> {{ listing.user.phone_number }}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -490,18 +318,6 @@
                 otherLocationInput.classList.add('d-none');
             }
         }
-
-        document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".view-details-btn").forEach(button => {
-            button.addEventListener("click", function () {
-                let card = this.closest(".card");
-                document.getElementById("modalTitle").textContent = card.querySelector(".card-title").textContent;
-                document.getElementById("modalDescription").textContent = card.querySelector(".card-text").textContent;
-                document.getElementById("modalCategory").textContent = card.getAttribute("data-category") || "N/A";
-                document.getElementById("modalLocation").textContent = card.getAttribute("data-location") || "N/A";
-            });
-        });
-    });
 
     </script>
 

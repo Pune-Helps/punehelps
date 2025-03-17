@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from sqlalchemy.orm import joinedload
+from models import Listing, User
 import os
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Needed for session management
@@ -61,7 +63,7 @@ class Listing(db.Model):
     urgent = db.Column(db.Boolean, default=False)
     expiry_date = db.Column(db.Date, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
+    other_category = db.Column(db.String(255), nullable=True)
 
 
 # Create the tables if they don't exist
@@ -157,8 +159,11 @@ def logout():
 @app.route('/landing_page')
 @login_required
 def homepage():
-    # Fetch all active listings from the database (before the expiry date)
-    listings = Listing.query.filter(Listing.expiry_date >= datetime.today()).order_by(Listing.created_at.desc()).all()
+    # Fetch all active listings with user details
+    listings = Listing.query.filter(Listing.expiry_date >= datetime.today()) \
+        .options(joinedload(Listing.user)) \
+        .order_by(Listing.created_at.desc()) \
+        .all()
 
     return render_template('landing.html', listings=listings)
 
@@ -182,6 +187,9 @@ def submit_help_request():
                           location=location, urgent=urgent, expiry_date=expiry_date)
     db.session.add(new_listing)
     db.session.commit()
+
+    # Check if "Other" is selected, then store other_category
+    other_category = request.form.get('other_category') if category == "Other" else None
 
     flash('Your help request has been submitted!', 'success')
     return redirect(url_for('homepage'))
