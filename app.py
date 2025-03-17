@@ -65,6 +65,8 @@ class Listing(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     other_category = db.Column(db.String(255), nullable=True)
 
+# Define the relationship to fix the error
+user = relationship("User", backref="listings")
 
 # Create the tables if they don't exist
 with app.app_context():
