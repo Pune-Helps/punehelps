@@ -163,7 +163,6 @@ def logout():
 def homepage():
     # Fetch all active listings with user details
     listings = Listing.query.filter(Listing.expiry_date >= datetime.today()) \
-        .options(joinedload(Listing.user)) \
         .order_by(Listing.created_at.desc()) \
         .all()
 
