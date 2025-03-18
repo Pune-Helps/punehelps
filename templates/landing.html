@@ -135,14 +135,14 @@
 
 <!-- Listings Section -->
 <div class="row mt-5">
-    {% if listings %}
+    {% if listings and listings|length > 0 %}
         {% for listing in listings %}
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ listing.title }}</h5>
 
-                        <!-- Description: Handle cases where it is shorter than 100 characters -->
+                        <!-- Description: Handle cases where it's shorter than 100 characters -->
                         <p class="card-text">
                             {{ listing.description[:100] }}{% if listing.description|length > 100 %}...{% endif %}
                         </p>
@@ -158,7 +158,7 @@
 
                         <p><strong>Location:</strong> {{ listing.location }}</p>
                         
-                        <!-- Urgent Handling: Ensure it's displayed correctly -->
+                        <!-- Urgent Handling -->
                         <p><strong>Urgent:</strong> 
                             {% if listing.urgent %}
                                 <span class="text-danger">Yes</span>
@@ -167,7 +167,7 @@
                             {% endif %}
                         </p>
 
-                        <!-- Expiry Date: Prevent errors if it's None -->
+                        <!-- Expiry Date Handling -->
                         <p><strong>Expiry Date:</strong> 
                             {% if listing.expiry_date %}
                                 {{ listing.expiry_date.strftime('%Y-%m-%d') }}
@@ -188,7 +188,6 @@
         <p class="text-center text-muted">No listings available at the moment.</p>
     {% endif %}
 </div>
-
     
 
     <!-- Modal for Request Help -->

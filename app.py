@@ -161,12 +161,12 @@ def logout():
 @app.route('/landing_page')
 @login_required
 def homepage():
-    # Fetch all active listings with user details
-    listings = Listing.query.filter(Listing.expiry_date >= datetime.today()) \
-        .order_by(Listing.created_at.desc()) \
-        .all()
-    print(f"DEBUG: Retrieved {len(listings)} listings")  # Debugging
+    with app.app_context():
+        listings = Listing.query.filter(Listing.expiry_date >= datetime.today()) \
+            .order_by(Listing.created_at.desc()) \
+            .all()
 
+    print(f"DEBUG: Sending {len(listings)} listings to template")  # Debugging
     return render_template('landing.html', listings=listings)
 
 
