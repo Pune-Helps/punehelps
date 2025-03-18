@@ -141,13 +141,9 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ listing.title }}</h5>
-
-                        <!-- Description: Handle cases where it's shorter than 100 characters -->
                         <p class="card-text">
                             {{ listing.description[:100] }}{% if listing.description|length > 100 %}...{% endif %}
                         </p>
-
-                        <!-- Category Handling -->
                         <p><strong>Category:</strong> 
                             {% if listing.category == "Other" and listing.other_category %}
                                 {{ listing.other_category }}
@@ -155,10 +151,7 @@
                                 {{ listing.category }}
                             {% endif %}
                         </p>
-
                         <p><strong>Location:</strong> {{ listing.location }}</p>
-                        
-                        <!-- Urgent Handling -->
                         <p><strong>Urgent:</strong> 
                             {% if listing.urgent %}
                                 <span class="text-danger">Yes</span>
@@ -166,8 +159,6 @@
                                 <span class="text-success">No</span>
                             {% endif %}
                         </p>
-
-                        <!-- Expiry Date Handling -->
                         <p><strong>Expiry Date:</strong> 
                             {% if listing.expiry_date %}
                                 {{ listing.expiry_date.strftime('%Y-%m-%d') }}
@@ -175,10 +166,18 @@
                                 <span class="text-muted">No Expiry</span>
                             {% endif %}
                         </p>
-
                         <a href="#" class="btn btn-primary view-details-btn" 
-                           data-bs-toggle="modal" data-bs-target="#detailsModal">
-                            View Details
+                           data-bs-toggle="modal" data-bs-target="#detailsModal"
+                           data-title="{{ listing.title }}"
+                           data-description="{{ listing.description }}"
+                           data-category="{{ listing.category }}"
+                           data-other-category="{{ listing.other_category }}"
+                           data-location="{{ listing.location }}"
+                           data-urgent="{{ 'Yes' if listing.urgent else 'No' }}"
+                           data-expiry="{{ listing.expiry_date.strftime('%Y-%m-%d') if listing.expiry_date else 'N/A' }}"
+                           data-user="{{ listing.user.username if listing.user else 'Anonymous' }}"
+                           data-phone="{{ listing.user.phone_number if listing.user else 'N/A' }}">
+                           View Details
                         </a>
                     </div>
                 </div>
@@ -287,25 +286,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Title:</strong> {{ listing.title }}</p>
-                <p><strong>Description:</strong> {{ listing.description }}</p>
+                <p><strong>Title:</strong> <span id="modal-title"></span></p>
+                <p><strong>Description:</strong> <span id="modal-description"></span></p>
                 
-                <p><strong>Category:</strong> 
-                    {% if listing.category == "Other" and listing.other_category %}
-                        {{ listing.other_category }}
-                    {% else %}
-                        {{ listing.category }}
-                    {% endif %}
-                </p>
-            
-                <p><strong>Location:</strong> {{ listing.location }}</p>
-                <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>
-                <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>
+                <p><strong>Category:</strong> <span id="modal-category"></span></p>
+                <p><strong>Location:</strong> <span id="modal-location"></span></p>
+                <p><strong>Urgent:</strong> <span id="modal-urgent"></span></p>
+                <p><strong>Expiry Date:</strong> <span id="modal-expiry"></span></p>
                 
                 <hr>
                 
-                <p><strong>Requester:</strong> {{ listing.user.username }}</p>
-                <p><strong>Contact Number:</strong> {{ listing.user.phone_number }}</p>
+                <p><strong>Requester:</strong> <span id="modal-user"></span></p>
+                <p><strong>Contact Number:</strong> <span id="modal-phone"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -343,6 +335,24 @@
                 otherLocationInput.classList.add('d-none');
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const detailsModal = document.getElementById("detailsModal");
+
+            detailsModal.addEventListener("show.bs.modal", function (event) {
+                const button = event.relatedTarget;
+        
+        // Get listing details from data attributes
+                document.getElementById("modal-title").textContent = button.getAttribute("data-title");
+                document.getElementById("modal-description").textContent = button.getAttribute("data-description");
+                document.getElementById("modal-category").textContent = button.getAttribute("data-other-category") || button.getAttribute("data-category");
+                document.getElementById("modal-location").textContent = button.getAttribute("data-location");
+                document.getElementById("modal-urgent").textContent = button.getAttribute("data-urgent");
+                document.getElementById("modal-user").textContent = button.getAttribute("data-user");
+                document.getElementById("modal-expiry").textContent = button.getAttribute("data-expiry");
+                document.getElementById("modal-phone").textContent = button.getAttribute("data-phone");
+            });
+        });
 
     </script>
 

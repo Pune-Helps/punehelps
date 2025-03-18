@@ -65,8 +65,8 @@ class Listing(db.Model):
     expiry_date = db.Column(db.Date, nullable=False)
     created_at = db.Column(db.DateTime, nullable=True)
 
-# Define the relationship to fix the error
-user = db.relationship('User', backref=db.backref('listings', lazy=True))
+    # ✅ Corrected relationship inside the class
+    user = db.relationship('User', backref=db.backref('listings', lazy=True))
 
 # Create the tables if they don't exist
 with app.app_context():
@@ -92,8 +92,8 @@ def register():
         password = request.form.get('password')
         phone_number = request.form.get('phone')
         birthdate = request.form.get('birthdate')
-        govt_id_type=request.form.get('govt_id_type'),  # NEW FIELD
-        govt_id_number=request.form.get('govt_id_number')  # NEW FIELD
+        govt_id_type = request.form.get('govt_id_type')
+        govt_id_number = request.form.get('govt_id_number')
 
         # Hash the password before storing it
         password_hash = generate_password_hash(password)
