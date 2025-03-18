@@ -223,60 +223,6 @@
     <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">
 </div>
 
-<!--Accordion Menu-->
-
-<div class="listings-container">
-    {% for listing in listings %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">{{ listing.title }}</h5>
-            <p class="card-text">{{ listing.description[:100] }}{% if listing.description|length > 100 %}...{% endif %}</p>
-
-            <!-- Reply Button (Expands Dropdown) -->
-            <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#replySection{{ listing.id }}">
-                Reply
-            </button>
-
-            <!-- Expandable Reply Section -->
-            <div class="collapse mt-3" id="replySection{{ listing.id }}">
-                <div class="card card-body border border-primary">
-                    
-                    <!-- Contact Name -->
-                    <p><strong>Contact Name:</strong> {{ listing.user.username }}</p>
-
-                    <!-- Email Section -->
-                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#emailSection{{ listing.id }}">
-                        📧 Email
-                    </button>
-                    <div class="collapse" id="emailSection{{ listing.id }}">
-                        <p><strong>Email:</strong> <a href="mailto:{{ listing.user.email }}">{{ listing.user.email }}</a></p>
-                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-email="{{ listing.user.email }}">Copy Email</button>
-                        
-                        <p class="mt-2">Webmail Links:</p>
-                        <ul class="list-unstyled">
-                            <li><a href="https://mail.google.com/mail/?view=cm&to={{ listing.user.email }}" target="_blank">📧 Gmail</a></li>
-                            <li><a href="https://mail.yahoo.com/" target="_blank">📧 Yahoo Mail</a></li>
-                            <li><a href="https://outlook.live.com/" target="_blank">📧 Outlook, Hotmail</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Phone Section -->
-                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#phoneSection{{ listing.id }}">
-                        📞 Call
-                    </button>
-                    <div class="collapse" id="phoneSection{{ listing.id }}">
-                        <p><strong>Phone:</strong> {{ listing.user.phone_number }}</p>
-                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-phone="{{ listing.user.phone_number }}">Copy Phone</button>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
 <!-- Title Field -->
 <div class="mb-3">
     <label for="title" class="form-label">What title do you want on your ad?</label>
@@ -351,7 +297,60 @@
                 <hr>
                 
                 <p><strong>Requester:</strong> <span id="modal-user"></span></p>
-                <p><strong>Contact Number:</strong> <span id="modal-phone"></span></p>
+
+                <!--Accordion Menu-->
+
+                <div class="listings-container">
+                {% for listing in listings %}
+                <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ listing.title }}</h5>
+            <p class="card-text">{{ listing.description[:100] }}{% if listing.description|length > 100 %}...{% endif %}</p>
+
+            <!-- Reply Button (Expands Dropdown) -->
+            <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#replySection{{ listing.id }}">
+                Reply
+            </button>
+
+            <!-- Expandable Reply Section -->
+            <div class="collapse mt-3" id="replySection{{ listing.id }}">
+                <div class="card card-body border border-primary">
+                    
+                    <!-- Contact Name -->
+                    <p><strong>Contact Name:</strong> {{ listing.user.username }}</p>
+
+                    <!-- Email Section -->
+                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#emailSection{{ listing.id }}">
+                        📧 Email
+                    </button>
+                    <div class="collapse" id="emailSection{{ listing.id }}">
+                        <p><strong>Email:</strong> <a href="mailto:{{ listing.user.email }}">{{ listing.user.email }}</a></p>
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-email="{{ listing.user.email }}">Copy Email</button>
+                        
+                        <p class="mt-2">Webmail Links:</p>
+                        <ul class="list-unstyled">
+                            <li><a href="https://mail.google.com/mail/?view=cm&to={{ listing.user.email }}" target="_blank">📧 Gmail</a></li>
+                            <li><a href="https://mail.yahoo.com/" target="_blank">📧 Yahoo Mail</a></li>
+                            <li><a href="https://outlook.live.com/" target="_blank">📧 Outlook, Hotmail</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Phone Section -->
+                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#phoneSection{{ listing.id }}">
+                        📞 Call
+                    </button>
+                    <div class="collapse" id="phoneSection{{ listing.id }}">
+                        <p><strong>Phone:</strong> {{ listing.user.phone_number }}</p>
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-phone="{{ listing.user.phone_number }}">Copy Phone</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -404,22 +403,29 @@
             document.getElementById("modal-user").textContent = button.getAttribute("data-user");
             document.getElementById("modal-expiry").textContent = button.getAttribute("data-expiry");
 
-            // ✅ Fix phone_number to show 'N/A' if missing
-            const phoneNumber = button.getAttribute("data-phone");
-            document.getElementById("modal-phone").textContent = phoneNumber ? phoneNumber : 'N/A';
-        });
+        // Populate Reply Section
+        document.getElementById("reply-username").textContent = button.getAttribute("data-user");
+        document.getElementById("reply-phone").textContent = button.getAttribute("data-phone");
+        
+        const email = button.getAttribute("data-email");
+        document.getElementById("reply-email-link").textContent = email;
+        document.getElementById("reply-email-link").href = "mailto:" + email;
+
+        document.getElementById("gmail-link").href = "https://mail.google.com/mail/?view=cm&to=" + email;
     });
 
-            document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".copy-btn").forEach(button => {
-            button.addEventListener("click", function () {
-            let textToCopy = this.getAttribute("data-email") || this.getAttribute("data-phone");
+    // Copy to Clipboard
+    document.querySelectorAll(".copy-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            const targetId = this.getAttribute("data-copy-target");
+            const textToCopy = document.getElementById(targetId).textContent;
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert("Copied to clipboard: " + textToCopy);
             });
         });
     });
 });
+
     </script>
 
 </body>
