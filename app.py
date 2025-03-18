@@ -90,29 +90,39 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-        phone_number = request.form.get('phone')
+        phone_number = request.form.get('phone_number')  # Fixed name to match form
         birthdate = request.form.get('birthdate')
         govt_id_type = request.form.get('govt_id_type')
         govt_id_number = request.form.get('govt_id_number')
 
-        # Hash the password before storing it
+        # Ensure no duplicate entries
+        existing_user = User.query.filter((User.email == email) | (User.username == username) | (User.govt_id_number == govt_id_number)).first()
+        if existing_user:
+            flash("Email, username, or Government ID already exists!", "danger")
+            return render_template('register.html')
+
+        # Hash the password
         password_hash = generate_password_hash(password)
 
         # Create new user
-        new_user = User(username=username, email=email, phone_number=phone_number,
-                        birthdate=datetime.strptime(birthdate, '%Y-%m-%d'))
-        new_user.set_password(password)
+        new_user = User(
+            username=username,
+            email=email,
+            password_hash=password_hash,
+            phone_number=phone_number,
+            birthdate=datetime.strptime(birthdate, '%Y-%m-%d'),
+            govt_id_type=govt_id_type,
+            govt_id_number=govt_id_number
+        )
 
         try:
             db.session.add(new_user)
             db.session.commit()
-
             flash('Registration successful!', 'success')
             return redirect(url_for('login'))
         except Exception as e:
             db.session.rollback()
             flash(f'Error during registration: {e}', 'danger')
-            return render_template('register.html')
 
     return render_template('register.html')
 
