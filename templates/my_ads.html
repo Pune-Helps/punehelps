@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ads - Pune Seva</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .listing-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stats-box {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .recent-viewers {
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+        .delete-btn {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('homepage') }}">Pune Seva</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('homepage') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('my_ads') }}">My Ads</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>My Help Request Ads</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if listings_data %}
+            {% for data in listings_data %}
+                <div class="listing-card">
+                    <form action="{{ url_for('delete_listing', listing_id=data.listing.id) }}" method="POST" class="delete-btn">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this listing?')">
+                            Delete
+                        </button>
+                    </form>
+                    
+                    <h3>{{ data.listing.title }}</h3>
+                    <p class="text-muted">Posted on: {{ data.listing.created_at.strftime('%Y-%m-%d') }}</p>
+                    <p>{{ data.listing.description[:200] }}{% if data.listing.description|length > 200 %}...{% endif %}</p>
+                    
+                    <div class="stats-box">
+                        <h5>View Statistics</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Email Views:</strong> {{ data.email_views }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Phone Views:</strong> {{ data.phone_views }}</p>
+                            </div>
+                        </div>
+                        
+                        {% if data.recent_viewers %}
+                            <div class="recent-viewers">
+                                <h6>Recent Viewers:</h6>
+                                <ul class="list-unstyled">
+                                    {% for view in data.recent_viewers %}
+                                        <li>
+                                            {{ view.viewer.username }} viewed your {{ view.contact_type }} 
+                                            ({{ view.viewed_at.strftime('%Y-%m-%d %H:%M') }})
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">
+                You haven't posted any help requests yet. 
+                <a href="{{ url_for('homepage') }}">Create your first help request</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

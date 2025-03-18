@@ -68,6 +68,16 @@ class Listing(db.Model):
     # ✅ Corrected relationship inside the class
     user = db.relationship('User', backref=db.backref('listings', lazy=True))
 
+class ListingView(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+    viewer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    viewed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    contact_type = db.Column(db.String(10), nullable=False)  # 'email' or 'phone'
+
+    listing = db.relationship('Listing', backref=db.backref('views', lazy=True))
+    viewer = db.relationship('User', backref=db.backref('viewed_listings', lazy=True))
+
 # Create the tables if they don't exist
 with app.app_context():
     db.create_all()
@@ -185,6 +195,76 @@ def homepage():
 def submit_help_request():
     # Fetch user details from the database
     user_id = current_user.id
+
+@app.route('/my-ads')
+@login_required
+def my_ads():
+    # Get all listings for the current user
+    user_listings = Listing.query.filter_by(user_id=current_user.id).all()
+    
+    # For each listing, get view statistics
+    listings_data = []
+    for listing in user_listings:
+        email_views = ListingView.query.filter_by(listing_id=listing.id, contact_type='email').count()
+        phone_views = ListingView.query.filter_by(listing_id=listing.id, contact_type='phone').count()
+        recent_viewers = (ListingView.query
+                         .filter_by(listing_id=listing.id)
+                         .order_by(ListingView.viewed_at.desc())
+                         .limit(5)
+                         .all())
+        
+        listings_data.append({
+            'listing': listing,
+            'email_views': email_views,
+            'phone_views': phone_views,
+            'recent_viewers': recent_viewers
+        })
+    
+    return render_template('my_ads.html', listings_data=listings_data)
+
+@app.route('/delete-listing/<int:listing_id>', methods=['POST'])
+@login_required
+def delete_listing(listing_id):
+    listing = Listing.query.get_or_404(listing_id)
+    
+    # Check if the current user owns this listing
+    if listing.user_id != current_user.id:
+        flash('You do not have permission to delete this listing.', 'danger')
+        return redirect(url_for('my_ads'))
+    
+    # Delete associated views first
+    ListingView.query.filter_by(listing_id=listing_id).delete()
+    
+    # Delete the listing
+    db.session.delete(listing)
+    db.session.commit()
+    
+    flash('Your listing has been deleted successfully.', 'success')
+    return redirect(url_for('my_ads'))
+
+@app.route('/record-view/<int:listing_id>/<contact_type>')
+@login_required
+def record_view(listing_id, contact_type):
+    if contact_type not in ['email', 'phone']:
+        return jsonify({'error': 'Invalid contact type'}), 400
+        
+    # Check if user has already viewed this contact info
+    existing_view = ListingView.query.filter_by(
+        listing_id=listing_id,
+        viewer_id=current_user.id,
+        contact_type=contact_type
+    ).first()
+    
+    if not existing_view:
+        new_view = ListingView(
+            listing_id=listing_id,
+            viewer_id=current_user.id,
+            contact_type=contact_type
+        )
+        db.session.add(new_view)
+        db.session.commit()
+    
+    return jsonify({'success': True})
 
     # Process form data
     title = request.form.get('title')
