@@ -53,20 +53,36 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    description = db.Column(db.Text)
+    icon = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def __repr__(self):
+        return f'<Category {self.name}>'
+
+
 class Listing(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    category = db.Column(db.String(100), nullable=False)
+    # Keep old category field for backward compatibility during migration
+    category = db.Column(db.String(100), nullable=True)
+    # New relationship with Category table
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True)
     other_category = db.Column(db.String(255), nullable=True)
     location = db.Column(db.String(100), nullable=False)
     urgent = db.Column(db.Boolean, nullable=True, default=False)
     expiry_date = db.Column(db.Date, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=True)
+    created_at = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 
-    # ✅ Corrected relationship inside the class
+    # Relationships
     user = db.relationship('User', backref=db.backref('listings', lazy=True))
+    category_rel = db.relationship('Category', backref=db.backref('listings', lazy=True))
 
 class ListingView(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -181,13 +197,17 @@ def logout():
 @login_required
 def homepage():
     with app.app_context():
-        listings = Listing.query.options(joinedload(Listing.user)) \
+        # Get all categories for the form dropdown
+        categories = Category.query.order_by(Category.name).all()
+        
+        # Get all active listings
+        listings = Listing.query.options(joinedload(Listing.user), joinedload(Listing.category_rel)) \
             .filter(Listing.expiry_date >= datetime.today()) \
             .order_by(Listing.created_at.desc()) \
             .all()
 
     print(f"DEBUG: Sending {len(listings)} listings to template")  # Debugging
-    return render_template('landing.html', listings=listings)
+    return render_template('landing.html', listings=listings, categories=categories)
 
 
 @app.route('/submit_help_request', methods=['POST'])
@@ -195,6 +215,35 @@ def homepage():
 def submit_help_request():
     # Fetch user details from the database
     user_id = current_user.id
+    
+    # Get form data
+    title = request.form.get('title')
+    description = request.form.get('description')
+    category_id = request.form.get('category')
+    other_category = request.form.get('other_category') if request.form.get('category') == 'Other' else None
+    location = request.form.get('location')
+    urgent = True if request.form.get('urgent') else False
+    expiry_date = datetime.strptime(request.form.get('expiry_date'), '%Y-%m-%d').date() if request.form.get('expiry_date') else None
+    
+    # Create new listing
+    new_listing = Listing(
+        user_id=user_id,
+        title=title,
+        description=description,
+        category_id=category_id,
+        other_category=other_category,
+        location=location,
+        urgent=urgent,
+        expiry_date=expiry_date,
+        created_at=datetime.utcnow()
+    )
+    
+    # Add to database
+    db.session.add(new_listing)
+    db.session.commit()
+    
+    flash('Your help request has been posted!', 'success')
+    return redirect(url_for('homepage'))
 
 @app.route('/my-ads')
 @login_required

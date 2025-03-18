@@ -8,30 +8,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
-        /* Custom Styles */
-        :root {
-            --primary-color: #2C3E50;
-            --secondary-color: #E74C3C;
-            --accent-color: #3498DB;
-            --background-color: #F8F9FA;
-            --text-color: #2C3E50;
-            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --border-radius: 12px;
-        }
-
         body {
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            color: var(--text-color);
-            background-color: var(--background-color);
+            font-family: 'Merriweather', serif;
         }
 
-        /* Header Styles */
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
 
         header .logo img {
@@ -39,170 +27,141 @@
             border-radius: 8px;
         }
 
-        /* Hero Section */
         .parallax-container {
-            height: 400px;
+            height: 100vh;
             position: relative;
-            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            margin-bottom: 2rem;
+            background: url("{{ url_for('static', filename='parallax.jpg') }}") no-repeat center center;
+            background-size: cover;
         }
 
-        .parallax {
-            position: relative;
-        }
-
-        .parallax::after {
-            content: '';
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+            width: 100%;
+            height: 100%;
         }
 
-        .parallax img {
-            min-width: 100%;
-            min-height: 100%;
-            object-fit: cover;
-            filter: brightness(0.9);
+        .parallax-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #9DBFAF;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .parallax h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            position: absolute;
-            text-align: center;
-            z-index: 1;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-            letter-spacing: -1px;
-        }
-
-        /* Search Section */
-        .search-container {
-            background: white;
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            margin-bottom: 3rem;
-        }
-
-        .search-container h2 {
-            color: var(--primary-color);
+            font-size: 2.5rem;
             font-weight: 700;
+            color: #356E6B;
             margin-bottom: 1.5rem;
         }
 
-        /* Buttons */
+        .search-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #9DBFAF;
+            margin-top: 2rem;
+        }
+
         .btn-custom {
-            background-color: var(--secondary-color);
+            background-color: #EABDA8;
             color: white;
-            border-radius: 8px;
-            padding: 0.5rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+            border: none;
         }
 
         .btn-custom:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow);
+            background-color: #356E6B;
         }
 
-        /* Cards */
         .card {
-            border: none;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-            background: white;
-            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #9DBFAF;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
         }
 
         .card-body {
-            padding: 1.5rem;
+            padding: 25px;
         }
 
-        .card-title {
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        /* Category and Location Tags */
         .tag {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
+            padding: 5px 15px;
             border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            background-color: #E8F4FC;
-            color: var(--accent-color);
-        }
-
-        /* Urgent Badge */
-        .badge-urgent {
-            background-color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin: 5px;
+            background-color: #9DBFAF;
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.875rem;
         }
 
-        /* Modal Styling */
+        .badge-urgent {
+            background-color: #EABDA8;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
         .modal-content {
-            border-radius: var(--border-radius);
-            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #9DBFAF;
         }
 
         .modal-header {
-            background-color: var(--primary-color);
+            background-color: #9DBFAF;
             color: white;
             border-bottom: none;
-        }
-
-        .modal-body {
-            padding: 2rem;
+            border-radius: 14px 14px 0 0;
         }
 
         .accordion-button:not(.collapsed) {
-            background-color: var(--accent-color);
+            background-color: #9DBFAF;
             color: white;
         }
 
         .accordion-button:focus {
             box-shadow: none;
-            border-color: var(--accent-color);
+            border-color: #9DBFAF;
         }
 
-        /* Footer */
         footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 2rem 0;
-            margin-top: 4rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px 0;
+            border-top: 2px solid #9DBFAF;
+            color: #356E6B;
         }
 
-        /* Responsive Font Sizes */
+        .form-control:focus {
+            border-color: #EABDA8;
+            box-shadow: none;
+        }
+
         @media (max-width: 768px) {
             .parallax h1 {
-                font-size: 2.5rem;
-            }
-
-            .search-container {
-                padding: 1.5rem;
+                font-size: 2rem;
             }
         }
     </style>
@@ -210,44 +169,45 @@
 <body>
 
     <!-- Header -->
-    <header class="d-flex justify-content-between align-items-center p-3">
+    <header class="d-flex justify-content-between align-items-center px-4">
         <div class="logo">
             <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Pune Seva Logo">
         </div>
         <div>
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('my_ads') }}" class="btn btn-outline-light me-2">Your Ads</a>
-                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>
-                <a href="{{ url_for('logout') }}" class="btn btn-outline-light ms-2">Logout</a>
+                <a href="{{ url_for('my_ads') }}" class="btn btn-custom me-2">Your Ads</a>
+                <a href="#" class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-custom ms-2">Logout</a>
             {% else %}
-                <a href="{{ url_for('login') }}" class="btn btn-outline-light me-2">Login</a>
-                <a href="{{ url_for('register') }}" class="btn btn-light">Register</a>
+                <a href="{{ url_for('login') }}" class="btn btn-custom me-2">Login</a>
+                <a href="{{ url_for('register') }}" class="btn btn-custom">Register</a>
             {% endif %}
         </div>
     </header>
 
-    <!-- Parallax Section -->
+    <!-- Main Content -->
     <div class="parallax-container">
-        <div class="parallax">
-            <img src="{{ url_for('static', filename='parallax.jpg') }}" alt="Parallax Image">
+        <div class="overlay"></div>
+        <div class="parallax-content">
             <h1>Helping Hands for Pune</h1>
+            <div class="search-container">
+                <h2 class="mb-4">Find Services or Help Near You</h2>
+                <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center">
+                    <div class="input-group w-75">
+                        <input type="text" class="form-control" name="search" placeholder="What kind of help are you looking for?">
+                        <button type="submit" class="btn btn-custom">Search</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- Search Bar and Sorting -->
+    <!-- Listings Section -->
     <div class="container mt-5">
-        <div class="search-container">
+        <div class="search-container mb-4">
             <div class="row">
-                <div class="col-12 text-center">
-                    <h2>Find Services or Help Near You</h2>
-                    <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center mt-3">
-                        <div class="input-group w-75">
-                            <input type="text" class="form-control" name="search" placeholder="What kind of help are you looking for?">
-                            <button type="submit" class="btn btn-custom">Search</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                <div class="col-12">
+                    <h2 class="text-center mb-4">Available Help Requests</h2>
 
         <!-- Sorting Options -->
         <div class="row mt-4">
@@ -273,10 +233,18 @@
                         </p>
                         <div class="mb-3">
                             <span class="tag">
-                                {% if listing.category == "Other" and listing.other_category %}
-                                    {{ listing.other_category }}
+                                {% if listing.category_rel %}
+                                    {% if listing.category_rel.name == 'Other' and listing.other_category %}
+                                        {{ listing.other_category }}
+                                    {% else %}
+                                        {{ listing.category_rel.name }}
+                                    {% endif %}
                                 {% else %}
-                                    {{ listing.category }}
+                                    {% if listing.category == 'Other' and listing.other_category %}
+                                        {{ listing.other_category }}
+                                    {% else %}
+                                        {{ listing.category }}
+                                    {% endif %}
                                 {% endif %}
                             </span>
                             <span class="tag">{{ listing.location }}</span>
@@ -296,7 +264,7 @@
         data-bs-target="#detailsModal"
         data-title="{{ listing.title }}"
         data-description="{{ listing.description }}"
-        data-category="{{ listing.category }}"
+        data-category="{{ listing.category_rel.name if listing.category_rel else listing.category }}"
         data-other-category="{{ listing.other_category }}"
         data-location="{{ listing.location }}"
         data-urgent="{{ 'Yes' if listing.urgent else 'No' }}"
@@ -334,20 +302,10 @@
                                 <label for="category" class="form-label">What do you need help with?</label>
                                 <select class="form-select" id="category" name="category" required>
                                     <option value="" selected disabled>Select a Category</option>
-                                    <option value="Medical Assistance">Medical Assistance</option>
-                                    <option value="Food Supply">Food Supply</option>
-        <option value="Shelter Needed">Shelter Needed</option>
-        <option value="Legal Assistance">Legal Assistance</option>
-        <option value="Financial Aid">Financial Aid</option>
-        <option value="Transport Assistance">Transport Assistance</option>
-        <option value="Educational Support">Educational Support</option>
-        <option value="Elderly Care">Elderly Care</option>
-        <option value="Job Assistance">Job Assistance</option>
-        <option value="Mental Health Support">Mental Health Support</option>
-        <option value="Disaster Relief">Disaster Relief</option>
-        <option value="Animal Rescue">Animal Rescue</option>
-        <option value="Other">Other</option>
-    </select>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
     <input type="text" class="form-control mt-2 d-none" id="other_category" name="other_category" placeholder="Enter Other Category">
 </div>
 
