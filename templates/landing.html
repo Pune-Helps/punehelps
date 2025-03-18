@@ -337,22 +337,24 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            const detailsModal = document.getElementById("detailsModal");
+        const detailsModal = document.getElementById("detailsModal");
 
-            detailsModal.addEventListener("show.bs.modal", function (event) {
-                const button = event.relatedTarget;
+        detailsModal.addEventListener("show.bs.modal", function (event) {
+            const button = event.relatedTarget;
         
-        // Get listing details from data attributes
-                document.getElementById("modal-title").textContent = button.getAttribute("data-title");
-                document.getElementById("modal-description").textContent = button.getAttribute("data-description");
-                document.getElementById("modal-category").textContent = button.getAttribute("data-other-category") || button.getAttribute("data-category");
-                document.getElementById("modal-location").textContent = button.getAttribute("data-location");
-                document.getElementById("modal-urgent").textContent = button.getAttribute("data-urgent");
-                document.getElementById("modal-user").textContent = button.getAttribute("data-user");
-                document.getElementById("modal-expiry").textContent = button.getAttribute("data-expiry");
-                document.getElementById("modal-phone").textContent = button.getAttribute("data-phone");
-            });
+            document.getElementById("modal-title").textContent = button.getAttribute("data-title");
+            document.getElementById("modal-description").textContent = button.getAttribute("data-description");
+            document.getElementById("modal-category").textContent = button.getAttribute("data-other-category") || button.getAttribute("data-category");
+            document.getElementById("modal-location").textContent = button.getAttribute("data-location");
+            document.getElementById("modal-urgent").textContent = button.getAttribute("data-urgent");
+            document.getElementById("modal-user").textContent = button.getAttribute("data-user");
+            document.getElementById("modal-expiry").textContent = button.getAttribute("data-expiry");
+
+            // ✅ Fix phone_number to show 'N/A' if missing
+            const phoneNumber = button.getAttribute("data-phone");
+            document.getElementById("modal-phone").textContent = phoneNumber ? phoneNumber : 'N/A';
         });
+    });
 
     </script>
 

@@ -7,39 +7,61 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Custom Styles */
-        .login-container {
-            min-height: 100vh;
+        /* Full-Page Background Image */
+        body {
+            background: url("{{ url_for('static', filename='parallax.jpg') }}") no-repeat center center;
+            background-size: cover;
+            height: 100vh;
             display: flex;
+            justify-content: center;
             align-items: center;
         }
 
-        .image-side {
-            background: url("{{ url_for('static', filename='login-bg.jpg') }}") no-repeat center center;
-            background-size: cover;
+        /* Semi-Transparent Overlay */
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
+        /* Login Form Box */
         .login-form {
-            background-color: white;
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 16px;
             box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
             border: 2px solid #9DBFAF; /* Sage Green border */
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
         }
 
-        .login-form h2 {
+        /* Logo */
+        .logo-container img {
+            max-width: 150px;
             margin-bottom: 20px;
-            font-family: 'Merriweather', serif;
-            color: #36454F; /* Charcoal Gray */
         }
 
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Fields */
         .form-control:focus {
-            border-color: #EABDA8; /* Soft Peach on focus */
+            border-color: #EABDA8; /* Soft Peach */
             box-shadow: none;
         }
 
+        /* Buttons */
         .btn-custom {
-            background-color: #EABDA8; /* Soft Peach button */
+            background-color: #EABDA8; /* Soft Peach */
             color: white;
             border-radius: 12px;
             font-family: 'Merriweather', serif;
@@ -50,7 +72,7 @@
         }
 
         .btn-custom:hover {
-            background-color: #356E6B; /* Deep Teal on hover */
+            background-color: #356E6B; /* Deep Teal */
         }
 
         .btn-register {
@@ -58,26 +80,27 @@
         }
 
         .btn-register:hover {
-            background-color: #356E6B; /* Deep Teal on hover */
+            background-color: #356E6B;
         }
 
+        /* OAuth Buttons */
         .oauth-buttons a {
-            width: 100%;  /* Make full width */
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px;
-            background-color: #9DBFAF; /* Sage Green */
+            background-color: #9DBFAF;
             color: white;
             text-decoration: none;
             border-radius: 8px;
             font-size: 0.9rem;
             transition: background-color 0.3s ease;
-            margin-bottom: 10px; /* Add spacing */
+            margin-bottom: 10px;
         }
 
         .oauth-buttons a:hover {
-            background-color: #356E6B; /* Deep Teal on hover */
+            background-color: #356E6B;
         }
 
         .oauth-buttons img {
@@ -90,57 +113,52 @@
 </head>
 <body>
 
-<div class="container-fluid login-container">
-    <div class="logo-container text-center mb-4">
-        <img src="{{ url_for('static', filename='parallax.jpg') }}" alt="Pune Seva Logo" class="img-fluid" style="max-width: 150px;">
+<!-- Dark Overlay to Improve Contrast -->
+<div class="overlay"></div>
+
+<!-- Login Box -->
+<div class="login-form">
+    <div class="logo-container text-center">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Pune Seva Logo">
     </div>
-    <div class="row g-0 w-100">
-        <!-- Image Side -->
-        <div class="col-md-6 image-side d-none d-md-block"></div>
+    <h2>Sign In</h2>
 
-        <!-- Form Side -->
-        <div class="col-md-6 d-flex justify-content-center align-items-center">
-            <div class="login-form text-center">
-                <h2>Sign In</h2>
-
-                <!-- Flash messages to display errors -->
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        <div class="alert-container">
-                            {% for category, message in messages %}
-                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endwith %}
-
-                <form action="{{ url_for('login') }}" method="post">
-                    <div class="mb-3">
-                        <label for="username_or_email" class="form-label">Username or Email</label>
-                        <input type="text" class="form-control" id="username_or_email" name="username_or_email" placeholder="Enter your username or email" required>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="btn btn-custom w-100 mb-3">Sign In</button>
-                </form>
-
-                <a href="{{ url_for('register') }}" class="btn btn-custom btn-register w-100 mb-3">Register / Sign Up</a>
-
-                <div class="d-flex justify-content-between oauth-buttons">
-                    <a href="/auth/facebook" class="btn btn-custom">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo"> Login with Facebook
-                    </a>
-                    <a href="/auth/google" class="btn btn-custom">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo"> Login with Google
-                    </a>
-                </div>
+                {% endfor %}
             </div>
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('login') }}" method="post">
+        <div class="mb-3">
+            <label for="username_or_email" class="form-label">Username or Email</label>
+            <input type="text" class="form-control" id="username_or_email" name="username_or_email" placeholder="Enter your username or email" required>
         </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-custom w-100 mb-3">Sign In</button>
+    </form>
+
+    <a href="{{ url_for('register') }}" class="btn btn-custom btn-register w-100 mb-3">Register / Sign Up</a>
+
+    <!-- OAuth Buttons -->
+    <div class="oauth-buttons">
+        <a href="/auth/facebook">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo"> Login with Facebook
+        </a>
+        <a href="/auth/google">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo"> Login with Google
+        </a>
     </div>
 </div>
 
@@ -148,15 +166,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(function () {
-        document.querySelectorAll(".alert").forEach(function (alert) {
-            if (alert.classList.contains("show")) {
-                alert.classList.remove("show"); // Hide the alert
-            }
-        });
-    }, 3000); // Extend duration to 3 seconds
-});
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.querySelectorAll(".alert").forEach(function (alert) {
+                alert.classList.remove("show"); // Hide the alert smoothly
+            });
+        }, 3000); // Extended to 3 seconds
+    });
 </script>
 
 </body>
