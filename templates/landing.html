@@ -9,78 +9,201 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         /* Custom Styles */
-        body {
-            font-family: 'Roboto', sans-serif;
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #E74C3C;
+            --accent-color: #3498DB;
+            --background-color: #F8F9FA;
+            --text-color: #2C3E50;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
         }
 
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        /* Header Styles */
         header {
-            background-color: #6c757d;
+            background-color: var(--primary-color);
             color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         header .logo img {
-            max-width: 150px;
+            max-width: 120px;
+            border-radius: 8px;
         }
 
+        /* Hero Section */
         .parallax-container {
-            height: 300px;
+            height: 400px;
             position: relative;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            margin-bottom: 2rem;
+        }
+
+        .parallax {
+            position: relative;
+        }
+
+        .parallax::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
         }
 
         .parallax img {
             min-width: 100%;
             min-height: 100%;
             object-fit: cover;
+            filter: brightness(0.9);
         }
 
         .parallax h1 {
-            font-size: 3rem;
-            font-weight: 700;
+            font-size: 3.5rem;
+            font-weight: 800;
             position: absolute;
+            text-align: center;
+            z-index: 1;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            letter-spacing: -1px;
         }
 
+        /* Search Section */
+        .search-container {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 3rem;
+        }
+
+        .search-container h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Buttons */
         .btn-custom {
-            background-color: #FF6F61;
+            background-color: var(--secondary-color);
             color: white;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         .btn-custom:hover {
-            background-color: #FF4136;
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow);
         }
 
-        .form-control:focus {
-            box-shadow: none;
-            border-color: #FF6F61;
-        }
-
+        /* Cards */
         .card {
-            transition: transform 0.2s ease-in-out;
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            background: white;
+            height: 100%;
         }
 
         .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Category and Location Tags */
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: #E8F4FC;
+            color: var(--accent-color);
+        }
+
+        /* Urgent Badge */
+        .badge-urgent {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: var(--border-radius);
+            overflow: hidden;
         }
 
         .modal-header {
-            background-color: #FF6F61;
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: var(--accent-color);
             color: white;
         }
 
-        .modal-footer .btn-primary {
-            background-color: #FF6F61;
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: var(--accent-color);
         }
 
+        /* Footer */
         footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            border-top: 1px solid #dee2e6;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        /* Responsive Font Sizes */
+        @media (max-width: 768px) {
+            .parallax h1 {
+                font-size: 2.5rem;
+            }
+
+            .search-container {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -113,15 +236,18 @@
 
     <!-- Search Bar and Sorting -->
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2>Find Services or Help Near You</h2>
-                <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center mt-3">
-                    <input type="text" class="form-control w-50" name="search" placeholder="Search Listings...">
-                    <button type="submit" class="btn btn-custom ms-2">Search</button>
-                </form>
+        <div class="search-container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2>Find Services or Help Near You</h2>
+                    <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center mt-3">
+                        <div class="input-group w-75">
+                            <input type="text" class="form-control" name="search" placeholder="What kind of help are you looking for?">
+                            <button type="submit" class="btn btn-custom">Search</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
 
         <!-- Sorting Options -->
         <div class="row mt-4">
@@ -145,21 +271,19 @@
                         <p class="card-text">
                             {{ listing.description[:100] }}{% if listing.description|length > 100 %}...{% endif %}
                         </p>
-                        <p><strong>Category:</strong> 
-                            {% if listing.category == "Other" and listing.other_category %}
-                                {{ listing.other_category }}
-                            {% else %}
-                                {{ listing.category }}
-                            {% endif %}
-                        </p>
-                        <p><strong>Location:</strong> {{ listing.location }}</p>
-                        <p><strong>Urgent:</strong> 
+                        <div class="mb-3">
+                            <span class="tag">
+                                {% if listing.category == "Other" and listing.other_category %}
+                                    {{ listing.other_category }}
+                                {% else %}
+                                    {{ listing.category }}
+                                {% endif %}
+                            </span>
+                            <span class="tag">{{ listing.location }}</span>
                             {% if listing.urgent %}
-                                <span class="text-danger">Yes</span>
-                            {% else %}
-                                <span class="text-success">No</span>
+                                <span class="badge-urgent">Urgent</span>
                             {% endif %}
-                        </p>
+                        </div>
                         <p><strong>Expiry Date:</strong> 
                             {% if listing.expiry_date %}
                                 {{ listing.expiry_date.strftime('%Y-%m-%d') }}
@@ -178,21 +302,11 @@
         data-urgent="{{ 'Yes' if listing.urgent else 'No' }}"
         data-expiry="{{ listing.expiry_date.strftime('%Y-%m-%d') if listing.expiry_date else 'N/A' }}"
         data-user="{{ listing.user.username if listing.user else 'Anonymous' }}"
-        data-listing-id="{{ listing.id }}">
+        data-listing-id="{{ listing.id }}"
+        data-email="{{ listing.user.email if listing.user else '' }}"
+        data-phone="{{ listing.user.phone_number if listing.user else '' }}">
         View Details
 </button>
-{% if current_user.is_authenticated and current_user.id != listing.user_id %}
-    <button class="btn btn-outline-primary view-email-btn mt-2"
-            data-listing-id="{{ listing.id }}"
-            data-email="{{ listing.user.email if listing.user else '' }}">
-        View Email
-    </button>
-    <button class="btn btn-outline-primary view-phone-btn mt-2"
-            data-listing-id="{{ listing.id }}"
-            data-phone="{{ listing.user.phone_number if listing.user else '' }}">
-        View Phone
-    </button>
-{% endif %}
                     </div>
                 </div>
             </div>
@@ -310,6 +424,39 @@
                 <hr>
                 <p><strong>Requester:</strong> <span id="modal-user"></span></p>
 
+                {% if current_user.is_authenticated %}
+                <div class="accordion mt-3" id="contactAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#emailCollapse" aria-expanded="false" 
+                                    aria-controls="emailCollapse" data-contact-type="email">
+                                View Email
+                            </button>
+                        </h2>
+                        <div id="emailCollapse" class="accordion-collapse collapse" data-bs-parent="#contactAccordion">
+                            <div class="accordion-body">
+                                <span id="modal-email"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#phoneCollapse" aria-expanded="false" 
+                                    aria-controls="phoneCollapse" data-contact-type="phone">
+                                View Phone Number
+                            </button>
+                        </h2>
+                        <div id="phoneCollapse" class="accordion-collapse collapse" data-bs-parent="#contactAccordion">
+                            <div class="accordion-body">
+                                <span id="modal-phone"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
                 <!-- Reply Section (Will populate dynamically via JavaScript) -->
                 <div id="replySectionContainer"></div>
 
@@ -367,28 +514,17 @@ async function recordView(listingId, contactType) {
 document.addEventListener("DOMContentLoaded", function () {
     const detailsModal = document.getElementById("detailsModal");
     
-    // Add click handlers for contact information
-    document.querySelectorAll('.view-email-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const listingId = this.getAttribute('data-listing-id');
-            const email = this.getAttribute('data-email');
-            recordView(listingId, 'email');
-            this.textContent = email;
-            this.classList.remove('btn-primary');
-            this.classList.add('btn-success');
-            this.disabled = true;
-        });
-    });
-    
-    document.querySelectorAll('.view-phone-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const listingId = this.getAttribute('data-listing-id');
-            const phone = this.getAttribute('data-phone');
-            recordView(listingId, 'phone');
-            this.textContent = phone;
-            this.classList.remove('btn-primary');
-            this.classList.add('btn-success');
-            this.disabled = true;
+    // Track when contact info is revealed in the modal
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+    accordionButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            if (!this.classList.contains('collapsed')) {
+                const contactType = this.getAttribute('data-contact-type');
+                const listingId = this.closest('.modal-content').getAttribute('data-listing-id');
+                if (contactType && listingId) {
+                    recordView(listingId, contactType);
+                }
+            }
         });
     });
 
@@ -404,9 +540,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("modal-user").textContent = button.getAttribute("data-user");
         document.getElementById("modal-expiry").textContent = button.getAttribute("data-expiry");
 
-        // Get email and phone
-        const email = button.getAttribute("data-email");
-        const phone = button.getAttribute("data-phone");
+        // Set listing ID on modal content for view tracking
+        this.querySelector('.modal-content').setAttribute('data-listing-id', button.getAttribute("data-listing-id"));
+
+        // Set contact information
+        document.getElementById("modal-email").textContent = button.getAttribute("data-email") || 'Not available';
+        document.getElementById("modal-phone").textContent = button.getAttribute("data-phone") || 'Not available';
         const listingId = button.getAttribute("data-listing-id");
 
         // Populate Reply Section dynamically

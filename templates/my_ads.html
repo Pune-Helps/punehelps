@@ -73,7 +73,7 @@
                     </form>
                     
                     <h3>{{ data.listing.title }}</h3>
-                    <p class="text-muted">Posted on: {{ data.listing.created_at.strftime('%Y-%m-%d') }}</p>
+                    <p class="text-muted">Posted on: {{ data.listing.created_at.strftime('%Y-%m-%d') if data.listing.created_at else 'N/A' }}</p>
                     <p>{{ data.listing.description[:200] }}{% if data.listing.description|length > 200 %}...{% endif %}</p>
                     
                     <div class="stats-box">
@@ -94,7 +94,7 @@
                                     {% for view in data.recent_viewers %}
                                         <li>
                                             {{ view.viewer.username }} viewed your {{ view.contact_type }} 
-                                            ({{ view.viewed_at.strftime('%Y-%m-%d %H:%M') }})
+                                            ({{ view.viewed_at.strftime('%Y-%m-%d %H:%M') if view.viewed_at else 'N/A' }})
                                         </li>
                                     {% endfor %}
                                 </ul>
