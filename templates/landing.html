@@ -93,8 +93,9 @@
         </div>
         <div>
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('logout') }}" class="btn btn-outline-light me-2">Logout</a>
+                <a href="{{ url_for('my_ads') }}" class="btn btn-outline-light me-2">Your Ads</a>
                 <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#requestHelpModal">Request Help</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light ms-2">Logout</a>
             {% else %}
                 <a href="{{ url_for('login') }}" class="btn btn-outline-light me-2">Login</a>
                 <a href="{{ url_for('register') }}" class="btn btn-light">Register</a>
@@ -166,21 +167,32 @@
                                 <span class="text-muted">No Expiry</span>
                             {% endif %}
                         </p>
-<a href="#" class="btn btn-primary view-details-btn" 
-   data-bs-toggle="modal" data-bs-target="#detailsModal"
-   data-title="{{ listing.title }}"
-   data-description="{{ listing.description }}"
-   data-category="{{ listing.category }}"
-   data-other-category="{{ listing.other_category }}"
-   data-location="{{ listing.location }}"
-   data-urgent="{{ 'Yes' if listing.urgent else 'No' }}"
-   data-expiry="{{ listing.expiry_date.strftime('%Y-%m-%d') if listing.expiry_date else 'N/A' }}"
-   data-user="{{ listing.user.username if listing.user else 'Anonymous' }}"
-   data-email="{{ listing.user.email if listing.user else '' }}"
-   data-phone="{{ listing.user.phone_number if listing.user else '' }}"
-   data-listing-id="{{ listing.id }}">
-   View Details
-</a>
+<button class="btn btn-primary view-details-btn" 
+        data-bs-toggle="modal" 
+        data-bs-target="#detailsModal"
+        data-title="{{ listing.title }}"
+        data-description="{{ listing.description }}"
+        data-category="{{ listing.category }}"
+        data-other-category="{{ listing.other_category }}"
+        data-location="{{ listing.location }}"
+        data-urgent="{{ 'Yes' if listing.urgent else 'No' }}"
+        data-expiry="{{ listing.expiry_date.strftime('%Y-%m-%d') if listing.expiry_date else 'N/A' }}"
+        data-user="{{ listing.user.username if listing.user else 'Anonymous' }}"
+        data-listing-id="{{ listing.id }}">
+        View Details
+</button>
+{% if current_user.is_authenticated and current_user.id != listing.user_id %}
+    <button class="btn btn-outline-primary view-email-btn mt-2"
+            data-listing-id="{{ listing.id }}"
+            data-email="{{ listing.user.email if listing.user else '' }}">
+        View Email
+    </button>
+    <button class="btn btn-outline-primary view-phone-btn mt-2"
+            data-listing-id="{{ listing.id }}"
+            data-phone="{{ listing.user.phone_number if listing.user else '' }}">
+        View Phone
+    </button>
+{% endif %}
                     </div>
                 </div>
             </div>
@@ -339,8 +351,46 @@
             }
         }
 
+// Function to record contact info view
+async function recordView(listingId, contactType) {
+    try {
+        const response = await fetch(`/record-view/${listingId}/${contactType}`);
+        const data = await response.json();
+        if (!data.success) {
+            console.error('Failed to record view');
+        }
+    } catch (error) {
+        console.error('Error recording view:', error);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const detailsModal = document.getElementById("detailsModal");
+    
+    // Add click handlers for contact information
+    document.querySelectorAll('.view-email-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const listingId = this.getAttribute('data-listing-id');
+            const email = this.getAttribute('data-email');
+            recordView(listingId, 'email');
+            this.textContent = email;
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-success');
+            this.disabled = true;
+        });
+    });
+    
+    document.querySelectorAll('.view-phone-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const listingId = this.getAttribute('data-listing-id');
+            const phone = this.getAttribute('data-phone');
+            recordView(listingId, 'phone');
+            this.textContent = phone;
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-success');
+            this.disabled = true;
+        });
+    });
 
     detailsModal.addEventListener("show.bs.modal", function (event) {
         const button = event.relatedTarget;
