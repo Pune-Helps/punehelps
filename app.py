@@ -157,12 +157,12 @@ def logout():
     flash('You have been logged out.', 'success')
     return redirect(url_for('login'))
 
-
 @app.route('/landing_page')
 @login_required
 def homepage():
     with app.app_context():
-        listings = Listing.query.filter(Listing.expiry_date >= datetime.today()) \
+        listings = Listing.query.options(joinedload(Listing.user)) \
+            .filter(Listing.expiry_date >= datetime.today()) \
             .order_by(Listing.created_at.desc()) \
             .all()
 
