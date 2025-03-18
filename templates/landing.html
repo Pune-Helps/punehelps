@@ -133,35 +133,61 @@
             </div>
         </div>
 
-        <!-- Listings Section -->
-        <div class="row mt-5">
-            {% if listings %}
-                {% for listing in listings %}
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ listing.title }}</h5>
-                                <p class="card-text">{{ listing.description[:100] }}...</p>
-                                <p><strong>Category:</strong> 
-                                    {% if listing.category == "Other" and listing.other_category %}
-                                        {{ listing.other_category }}
-                                    {% else %}
-                                        {{ listing.category }}
-                                    {% endif %}
-                                </p>
-                                <p><strong>Location:</strong> {{ listing.location }}</p>
-                                <p><strong>Urgent:</strong> {{ 'Yes' if listing.urgent else 'No' }}</p>
-                                <p><strong>Expiry Date:</strong> {{ listing.expiry_date.strftime('%Y-%m-%d') }}</p>
-                                <a href="#" class="btn btn-primary view-details-btn" data-bs-toggle="modal" data-bs-target="#detailsModal">View Details</a>
-                            </div>
-                        </div>
+<!-- Listings Section -->
+<div class="row mt-5">
+    {% if listings %}
+        {% for listing in listings %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ listing.title }}</h5>
+
+                        <!-- Description: Handle cases where it is shorter than 100 characters -->
+                        <p class="card-text">
+                            {{ listing.description[:100] }}{% if listing.description|length > 100 %}...{% endif %}
+                        </p>
+
+                        <!-- Category Handling -->
+                        <p><strong>Category:</strong> 
+                            {% if listing.category == "Other" and listing.other_category %}
+                                {{ listing.other_category }}
+                            {% else %}
+                                {{ listing.category }}
+                            {% endif %}
+                        </p>
+
+                        <p><strong>Location:</strong> {{ listing.location }}</p>
+                        
+                        <!-- Urgent Handling: Ensure it's displayed correctly -->
+                        <p><strong>Urgent:</strong> 
+                            {% if listing.urgent %}
+                                <span class="text-danger">Yes</span>
+                            {% else %}
+                                <span class="text-success">No</span>
+                            {% endif %}
+                        </p>
+
+                        <!-- Expiry Date: Prevent errors if it's None -->
+                        <p><strong>Expiry Date:</strong> 
+                            {% if listing.expiry_date %}
+                                {{ listing.expiry_date.strftime('%Y-%m-%d') }}
+                            {% else %}
+                                <span class="text-muted">No Expiry</span>
+                            {% endif %}
+                        </p>
+
+                        <a href="#" class="btn btn-primary view-details-btn" 
+                           data-bs-toggle="modal" data-bs-target="#detailsModal">
+                            View Details
+                        </a>
                     </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-center">No listings available at the moment.</p>
-            {% endif %}
-        </div>
-    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center text-muted">No listings available at the moment.</p>
+    {% endif %}
+</div>
 
     
 

@@ -165,6 +165,8 @@ def homepage():
     listings = Listing.query.filter(Listing.expiry_date >= datetime.today()) \
         .order_by(Listing.created_at.desc()) \
         .all()
+    
+        print(f"DEBUG: Retrieved {len(listings)} listings")  # Debugging
 
     return render_template('landing.html', listings=listings)
 
