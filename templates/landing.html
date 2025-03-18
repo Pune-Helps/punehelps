@@ -166,19 +166,21 @@
                                 <span class="text-muted">No Expiry</span>
                             {% endif %}
                         </p>
-                        <a href="#" class="btn btn-primary view-details-btn" 
-                           data-bs-toggle="modal" data-bs-target="#detailsModal"
-                           data-title="{{ listing.title }}"
-                           data-description="{{ listing.description }}"
-                           data-category="{{ listing.category }}"
-                           data-other-category="{{ listing.other_category }}"
-                           data-location="{{ listing.location }}"
-                           data-urgent="{{ 'Yes' if listing.urgent else 'No' }}"
-                           data-expiry="{{ listing.expiry_date.strftime('%Y-%m-%d') if listing.expiry_date else 'N/A' }}"
-                           data-user="{{ listing.user.username if listing.user else 'Anonymous' }}"
-                           data-phone="{{ listing.user.phone_number if listing.user else 'N/A' }}">
-                           View Details
-                        </a>
+<a href="#" class="btn btn-primary view-details-btn" 
+   data-bs-toggle="modal" data-bs-target="#detailsModal"
+   data-title="{{ listing.title }}"
+   data-description="{{ listing.description }}"
+   data-category="{{ listing.category }}"
+   data-other-category="{{ listing.other_category }}"
+   data-location="{{ listing.location }}"
+   data-urgent="{{ 'Yes' if listing.urgent else 'No' }}"
+   data-expiry="{{ listing.expiry_date.strftime('%Y-%m-%d') if listing.expiry_date else 'N/A' }}"
+   data-user="{{ listing.user.username if listing.user else 'Anonymous' }}"
+   data-email="{{ listing.user.email if listing.user else '' }}"
+   data-phone="{{ listing.user.phone_number if listing.user else '' }}"
+   data-listing-id="{{ listing.id }}">
+   View Details
+</a>
                     </div>
                 </div>
             </div>
@@ -277,7 +279,7 @@
             </div>
         </div>
     </div>
-    <!--  Details Modal -->
+<!--  Details Modal -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -288,69 +290,17 @@
             <div class="modal-body">
                 <p><strong>Title:</strong> <span id="modal-title"></span></p>
                 <p><strong>Description:</strong> <span id="modal-description"></span></p>
-                
                 <p><strong>Category:</strong> <span id="modal-category"></span></p>
                 <p><strong>Location:</strong> <span id="modal-location"></span></p>
                 <p><strong>Urgent:</strong> <span id="modal-urgent"></span></p>
                 <p><strong>Expiry Date:</strong> <span id="modal-expiry"></span></p>
                 
                 <hr>
-                
                 <p><strong>Requester:</strong> <span id="modal-user"></span></p>
 
-                <!--Accordion Menu-->
+                <!-- Reply Section (Will populate dynamically via JavaScript) -->
+                <div id="replySectionContainer"></div>
 
-                <div class="listings-container">
-                {% for listing in listings %}
-                <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">{{ listing.title }}</h5>
-            <p class="card-text">{{ listing.description[:100] }}{% if listing.description|length > 100 %}...{% endif %}</p>
-
-            <!-- Reply Button (Expands Dropdown) -->
-            <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#replySection{{ listing.id }}">
-                Reply
-            </button>
-
-            <!-- Expandable Reply Section -->
-            <div class="collapse mt-3" id="replySection{{ listing.id }}">
-                <div class="card card-body border border-primary">
-                    
-                    <!-- Contact Name -->
-                    <p><strong>Contact Name:</strong> {{ listing.user.username }}</p>
-
-                    <!-- Email Section -->
-                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#emailSection{{ listing.id }}">
-                        📧 Email
-                    </button>
-                    <div class="collapse" id="emailSection{{ listing.id }}">
-                        <p><strong>Email:</strong> <a href="mailto:{{ listing.user.email }}">{{ listing.user.email }}</a></p>
-                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-email="{{ listing.user.email }}">Copy Email</button>
-                        
-                        <p class="mt-2">Webmail Links:</p>
-                        <ul class="list-unstyled">
-                            <li><a href="https://mail.google.com/mail/?view=cm&to={{ listing.user.email }}" target="_blank">📧 Gmail</a></li>
-                            <li><a href="https://mail.yahoo.com/" target="_blank">📧 Yahoo Mail</a></li>
-                            <li><a href="https://outlook.live.com/" target="_blank">📧 Outlook, Hotmail</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Phone Section -->
-                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#phoneSection{{ listing.id }}">
-                        📞 Call
-                    </button>
-                    <div class="collapse" id="phoneSection{{ listing.id }}">
-                        <p><strong>Phone:</strong> {{ listing.user.phone_number }}</p>
-                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-phone="{{ listing.user.phone_number }}">Copy Phone</button>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-    {% endfor %}
-</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -389,44 +339,72 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-        const detailsModal = document.getElementById("detailsModal");
+document.addEventListener("DOMContentLoaded", function () {
+    const detailsModal = document.getElementById("detailsModal");
 
-        detailsModal.addEventListener("show.bs.modal", function (event) {
-            const button = event.relatedTarget;
-        
-            document.getElementById("modal-title").textContent = button.getAttribute("data-title");
-            document.getElementById("modal-description").textContent = button.getAttribute("data-description");
-            document.getElementById("modal-category").textContent = button.getAttribute("data-other-category") || button.getAttribute("data-category");
-            document.getElementById("modal-location").textContent = button.getAttribute("data-location");
-            document.getElementById("modal-urgent").textContent = button.getAttribute("data-urgent");
-            document.getElementById("modal-user").textContent = button.getAttribute("data-user");
-            document.getElementById("modal-expiry").textContent = button.getAttribute("data-expiry");
+    detailsModal.addEventListener("show.bs.modal", function (event) {
+        const button = event.relatedTarget;
 
-        // Populate Reply Section
-        document.getElementById("reply-username").textContent = button.getAttribute("data-user");
-        document.getElementById("reply-phone").textContent = button.getAttribute("data-phone");
-        
+        // Populate modal with data attributes
+        document.getElementById("modal-title").textContent = button.getAttribute("data-title");
+        document.getElementById("modal-description").textContent = button.getAttribute("data-description");
+        document.getElementById("modal-category").textContent = button.getAttribute("data-other-category") || button.getAttribute("data-category");
+        document.getElementById("modal-location").textContent = button.getAttribute("data-location");
+        document.getElementById("modal-urgent").textContent = button.getAttribute("data-urgent");
+        document.getElementById("modal-user").textContent = button.getAttribute("data-user");
+        document.getElementById("modal-expiry").textContent = button.getAttribute("data-expiry");
+
+        // Get email and phone
         const email = button.getAttribute("data-email");
-        document.getElementById("reply-email-link").textContent = email;
-        document.getElementById("reply-email-link").href = "mailto:" + email;
+        const phone = button.getAttribute("data-phone");
+        const listingId = button.getAttribute("data-listing-id");
 
-        document.getElementById("gmail-link").href = "https://mail.google.com/mail/?view=cm&to=" + email;
-    });
+        // Populate Reply Section dynamically
+        const replySectionContainer = document.getElementById("replySectionContainer");
+        replySectionContainer.innerHTML = `
+            <button class="btn btn-outline-primary mt-3" data-bs-toggle="collapse" data-bs-target="#replySection">
+                Reply
+            </button>
 
-    // Copy to Clipboard
-    document.querySelectorAll(".copy-btn").forEach(button => {
-        button.addEventListener("click", function () {
-            const targetId = this.getAttribute("data-copy-target");
-            const textToCopy = document.getElementById(targetId).textContent;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert("Copied to clipboard: " + textToCopy);
+            <div class="collapse mt-3" id="replySection">
+                <div class="card card-body border border-primary">
+                    <p><strong>Contact Name:</strong> ${button.getAttribute("data-user")}</p>
+
+                    <!-- Email Section -->
+                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#emailSection">
+                        📧 Email
+                    </button>
+                    <div class="collapse" id="emailSection">
+                        <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-copy="${email}">Copy Email</button>
+                    </div>
+
+                    <!-- Phone Section -->
+                    <button class="btn btn-light w-100 text-start mb-2" data-bs-toggle="collapse" data-bs-target="#phoneSection">
+                        📞 Call
+                    </button>
+                    <div class="collapse" id="phoneSection">
+                        <p><strong>Phone:</strong> ${phone}</p>
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" data-copy="${phone}">Copy Phone</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Enable copy buttons
+        setTimeout(() => {
+            document.querySelectorAll(".copy-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const textToCopy = this.getAttribute("data-copy");
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        alert("Copied to clipboard: " + textToCopy);
+                    });
+                });
             });
-        });
+        }, 500);
     });
 });
-
-    </script>
+</script>
 
 </body>
 </html>
