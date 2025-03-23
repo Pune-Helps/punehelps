@@ -8,24 +8,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #EABDA8;
-            --hover-color: #e0a48d;
-            --text-color: #333333;
-            --border-radius: 6px;
-            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            --primary-color: #2C3E50;
+            --secondary-color: #E74C3C;
+            --accent-color: #3498DB;
+            --background-color: #F8F9FA;
+            --text-color: #2C3E50;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
         }
-        
+
         body {
-            font-family: 'Open Sans', 'Segoe UI', 'Roboto', sans-serif;
+            font-family: 'Roboto', sans-serif;
             color: var(--text-color);
-            background-color: #f8f9fa;
-            padding-top: 76px; /* For fixed header */
+            background-color: var(--background-color);
+            padding-top: 76px;
             min-height: 100vh;
         }
 
         header, .navbar {
             background-color: #ffffff;
-            box-shadow: var(--box-shadow);
+            box-shadow: var(--card-shadow);
             padding: 15px 0;
             position: fixed;
             width: 100%;
@@ -33,44 +36,40 @@
             z-index: 1000;
         }
 
-        .content-wrapper {
-            padding-top: 2rem;
-        }
-
         .page-header {
             background-color: #ffffff;
             padding: 30px 0;
             margin-bottom: 30px;
-            box-shadow: var(--box-shadow);
+            box-shadow: var(--card-shadow);
         }
 
         .page-header h2 {
-            color: var(--text-color);
+            color: var(--primary-color);
             margin-bottom: 1rem;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .listing-card {
-            background: #ffffff;
+            border: none;
             border-radius: var(--border-radius);
-            margin-bottom: 20px;
-            padding: 20px;
-            box-shadow: var(--box-shadow);
-            transition: transform 0.2s ease;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
             height: 100%;
+            margin-bottom: 30px;
+            overflow: hidden;
         }
 
         .listing-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
         }
 
         .stats-box {
-            background-color: #ffffff;
+            background-color: var(--background-color);
             border-radius: var(--border-radius);
             padding: 15px;
-            margin-top: 15px;
-            border: 1px solid #e9ecef;
+            margin-top: 10px;
+            box-shadow: var(--card-shadow);
         }
 
         .recent-viewers {
@@ -82,7 +81,7 @@
         }
 
         .btn-custom {
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
             color: white;
             border-radius: var(--border-radius);
             padding: 8px 16px;
@@ -91,7 +90,7 @@
         }
 
         .btn-custom:hover {
-            background-color: var(--hover-color);
+            background-color: var(--accent-color);
         }
 
         .btn-delete {
@@ -112,44 +111,45 @@
             border: none;
             margin-bottom: 20px;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .btn-custom {
+                padding: 0.5rem 1rem;
+            }
+
+            .listing-card {
+                margin-bottom: 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('homepage') }}">
-                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Pune Seva Logo" style="max-width: 120px; border-radius: var(--border-radius);">
-                Pune Seva
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="{{ url_for('homepage') }}">Pune Seva</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('homepage') }}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ url_for('my_ads') }}">My Ads</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="btn btn-custom" href="{{ url_for('homepage') }}#helpRequestForm">Request Help</a>
-                    </li>
-                    <li class="nav-item ms-2">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="page-header">
-        <div class="container">
-            <h2 class="text-center">My Help Request Ads</h2>
-        </div>
-    </div>
-    
     <div class="container mt-4">
+        <h2 class="page-header">My Help Request Ads</h2>
         
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -164,22 +164,25 @@
 
         {% if listings_data %}
             {% for data in listings_data %}
-                <div class="row mb-4">
-                <div class="col-md-12">
-                    <div class="listing-card">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <h4>{{ data.listing.title }}</h4>
-                            <form action="{{ url_for('delete_listing', listing_id=data.listing.id) }}" method="POST">
-                                <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this listing?')">
-                                    Delete
-                                </button>
-                            </form>
-                        </div>
+                <div class="listing-card">
+                    <form action="{{ url_for('delete_listing', listing_id=data.listing.id) }}" method="POST" class="float-end">
+                        <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this listing?')">
+                            Delete
+                        </button>
+                    </form>
                     
                     <h3>{{ data.listing.title }}</h3>
                     <p class="text-muted">Posted on: {{ data.listing.created_at.strftime('%Y-%m-%d') if data.listing.created_at else 'N/A' }}</p>
                     <p>{{ data.listing.description[:200] }}{% if data.listing.description|length > 200 %}...{% endif %}</p>
-                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Category:</strong> {{ data.listing.category }}<br>
+                            <strong>Location:</strong> {{ data.listing.location }}
+                        </div>
+                        <div>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">Share</a>
+                        </div>
+                    </div>
                     <div class="stats-box">
                         <h5>View Statistics</h5>
                         <div class="row">
@@ -218,4 +221,4 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>

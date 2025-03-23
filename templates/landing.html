@@ -9,23 +9,27 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         :root {
-            --primary-color: #EABDA8;
-            --hover-color: #e0a48d;
-            --text-color: #333333;
-            --border-radius: 6px;
-            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        body {
-            font-family: 'Open Sans', 'Segoe UI', 'Roboto', sans-serif;
-            color: var(--text-color);
-            background-color: #f8f9fa;
-            padding-top: 76px; /* For fixed header */
+            --primary-color: #2C3E50;
+            --secondary-color: #E74C3C;
+            --accent-color: #3498DB;
+            --background-color: #F8F9FA;
+            --text-color: #2C3E50;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
         }
 
-        header {
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding-top: 76px;
+            min-height: 100vh;
+        }
+
+        header, .navbar {
             background-color: #ffffff;
-            box-shadow: var(--box-shadow);
+            box-shadow: var(--card-shadow);
             padding: 15px 0;
             position: fixed;
             width: 100%;
@@ -33,131 +37,119 @@
             z-index: 1000;
         }
 
-        header .logo img {
-            max-width: 120px;
+        .hero {
+            background-image: url('hero-background.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 20px;
             border-radius: var(--border-radius);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
-        .hero-section {
-            background-color: #ffffff;
-            padding: 40px 0;
-            margin-bottom: 30px;
-            box-shadow: var(--box-shadow);
+        .hero .btn:hover {
+            background-color: var(--accent-color);
         }
 
-        .hero-section h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: var(--text-color);
+        .search-container {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 3rem;
+        }
+
+        .search-container h2 {
+            color: var(--primary-color);
+            font-weight: 700;
             margin-bottom: 1.5rem;
         }
-        
-        .search-container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin-bottom: 30px;
-        }
-        
+
         .btn-custom {
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
             color: white;
             border-radius: var(--border-radius);
-            padding: 8px 16px;
-            transition: background-color 0.2s ease;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s ease;
             border: none;
+            font-weight: 600;
         }
-        
+
         .btn-custom:hover {
-            background-color: var(--hover-color);
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .card {
             border: none;
             border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            transition: transform 0.2s ease;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
             height: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
         }
 
         .card-body {
-            padding: 1.25rem;
+            padding: 1.5rem;
         }
 
         .card-title {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
         }
 
         .tag {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-right: 5px;
-            margin-bottom: 5px;
-            background-color: #e9ecef;
-            color: var(--text-color);
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
         }
 
         .badge-urgent {
             background-color: #dc3545;
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
         }
 
-        .modal-content {
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-
-        .modal-header {
-            background-color: var(--primary-color);
-            color: white;
-            border-bottom: none;
-        }
-
-        .accordion-button:not(.collapsed) {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .accordion-button:focus {
-            box-shadow: none;
-        }
-
-        footer {
-            background-color: #ffffff;
-            padding: 20px 0;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-            margin-top: 30px;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(234, 189, 168, 0.25);
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
-            body {
-                padding-top: 66px;
+            .hero h1 {
+                font-size: 2.5rem;
             }
-            
-            .hero-section h1 {
-                font-size: 2rem;
-            }
-            
+
             .btn-custom {
-                padding: 6px 12px;
+                padding: 0.5rem 1rem;
+            }
+
+            .card {
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -188,12 +180,32 @@
                 <div class="col-lg-8 mx-auto text-center">
                     <h1>Helping Hands for Pune</h1>
                     <p class="lead mb-4">Connect with people in your community who need help or can offer assistance</p>
-                    <form action="{{ url_for('search_listings') }}" method="GET" class="form-inline d-flex justify-content-center mb-4">
-                        <div class="input-group w-75">
-                            <input type="text" class="form-control" name="search" placeholder="What kind of help are you looking for?">
-                            <button type="submit" class="btn btn-custom">Search</button>
-                        </div>
-                    </form>
+                    <div class="search-container">
+                        <h2>Find Help Requests</h2>
+                        <form method="GET" action="{{ url_for('search_listings') }}">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select class="form-select" name="category">
+                                        <option value="">All Categories</option>
+                                        {% for category in categories %}
+                                            <option value="{{ category.name }}">{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" name="location">
+                                        <option value="">All Locations</option>
+                                        <option value="Pune">Pune</option>
+                                        <option value="Mumbai">Mumbai</option>
+                                        <option value="Delhi">Delhi</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-custom">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -551,4 +563,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </body>
 </html>
-
