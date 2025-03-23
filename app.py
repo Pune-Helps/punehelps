@@ -219,8 +219,8 @@ def submit_help_request():
     # Get form data
     title = request.form.get('title')
     description = request.form.get('description')
-    category_id = request.form.get('category')
-    other_category = request.form.get('other_category') if request.form.get('category') == 'Other' else None
+    category_id = request.form.get('category_id')  # Updated field name to match the form
+    other_category = request.form.get('other_category') if category_id and Category.query.get(category_id).name == 'Other' else None
     location = request.form.get('location')
     urgent = True if request.form.get('urgent') else False
     expiry_date = datetime.strptime(request.form.get('expiry_date'), '%Y-%m-%d').date() if request.form.get('expiry_date') else None
