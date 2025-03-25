@@ -19,7 +19,7 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             color: var(--text-color);
             background-color: var(--background-color);
             padding-top: 76px;
@@ -50,81 +50,27 @@
         }
 
         .listing-card {
-            border: none;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-            height: 100%;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .listing-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .stats-box {
-            background-color: var(--background-color);
-            border-radius: var(--border-radius);
+            background-color: #f8f9fa;
+            border-radius: 6px;
             padding: 15px;
             margin-top: 10px;
-            box-shadow: var(--card-shadow);
         }
 
         .recent-viewers {
             font-size: 0.9em;
             margin-top: 15px;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: var(--border-radius);
         }
 
-        .btn-custom {
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: var(--border-radius);
-            padding: 8px 16px;
-            transition: background-color 0.2s ease;
-            border: none;
-        }
-
-        .btn-custom:hover {
-            background-color: var(--accent-color);
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-            border-radius: var(--border-radius);
-            padding: 6px 12px;
-            transition: background-color 0.2s ease;
-            border: none;
-        }
-
-        .btn-delete:hover {
-            background-color: #c82333;
-        }
-
-        .alert {
-            border-radius: var(--border-radius);
-            border: none;
-            margin-bottom: 20px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .page-header h2 {
-                font-size: 1.5rem;
-            }
-
-            .btn-custom {
-                padding: 0.5rem 1rem;
-            }
-
-            .listing-card {
-                margin-bottom: 20px;
-            }
+        .delete-btn {
+            float: right;
         }
     </style>
 </head>
