@@ -165,6 +165,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            left: 0;
         }
 
         .btn-primary {
@@ -225,7 +226,8 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <button type="submit" class="btn btn-custom">Search</button>
+                                    <button type="submit" class="btn btn-custom" id="searchButton">Search</button>
+                                    <button type="button" id="resetButton" class="btn btn-outline-secondary ms-2" disabled>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -244,10 +246,10 @@
         <!-- Sorting Options -->
         <div class="row mt-4">
             <div class="col-12 d-flex justify-content-center">
-                <div class="btn-group" role="group" aria-label="Sorting options">
+                <div class="btn-group" role="group" aria-label="Sort Options">
                     <button type="button" class="btn btn-secondary">Newest</button>
-                    <button type="button" class="btn btn-secondary">Featured</button>
-                    <button type="button" class="btn btn-secondary">Location</button>
+                    <button type="button" class="btn btn-secondary">Urgent</button>
+                    <button type="button" class="btn btn-secondary">Past Requests</button>
                 </div>
             </div>
         </div>
@@ -581,6 +583,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             });
         }, 500);
+    });
+});
+
+const resetButton = document.getElementById('resetButton');
+const searchButton = document.getElementById('searchButton');
+const sortButtons = document.querySelectorAll('.btn-group .btn-secondary');
+
+function resetListings() {
+    // Logic to reset listings to default
+    alert('Listings reset to default!');
+}
+
+resetButton.addEventListener('click', resetListings);
+
+searchButton.addEventListener('click', function() {
+    // Logic for search functionality
+    // After search logic
+    resetButton.disabled = false;
+});
+
+sortButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Logic for sorting
+        // After sorting logic
+        resetButton.disabled = false;
     });
 });
 </script>
